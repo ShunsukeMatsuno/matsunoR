@@ -1,0 +1,6 @@
+useDynLib(matsuno)
+import(RcppEigen)
+importFrom(Rcpp, evalCpp)
+exportPattern("^[[:alpha:]]+")
+export("%+%")
+
