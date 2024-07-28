@@ -10,3 +10,4 @@ License: Free
 Imports: Rcpp (>= 1.0.5), RcppEigen
 LinkingTo: Rcpp, RcppEigen
 RoxygenNote: 7.3.2
+Encoding: UTF-8
