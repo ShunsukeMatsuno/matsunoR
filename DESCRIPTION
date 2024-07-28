@@ -8,7 +8,6 @@ Maintainer: Shunsuke Matsuno <matsuno.shunsuke@gmail.com>
 Description: Some helper functions
 License: Free
 Imports: Rcpp, RcppEigen, ggplot2
-LinkingTo: Rcpp, RcppEigen
+LinkingTo: Rcpp, RcppEigen, ggplot2
 RoxygenNote: 7.3.2
 Encoding: UTF-8
-LazyData: true

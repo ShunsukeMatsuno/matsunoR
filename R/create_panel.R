@@ -1,5 +1,10 @@
+#' create a balance panel
+#' @param N number of firms
+#' @param Time number of periods
+#' @param J number of groups (industries)
+
 create_panel <- function(N, Time, J = 1){
-  # create a balance panel
+  # 
   # N: number of firms 
   # Time: number of periods
   # J: number of groups (industries)
