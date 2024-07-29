@@ -35,7 +35,7 @@ check_key <- function(df, key){
     message("The key is unique")
   } else {
     message("The key is not unique. Here are the duplicates:")
-    print(df_duplicates)
+    return(df_duplicates)
   }
 }
 
