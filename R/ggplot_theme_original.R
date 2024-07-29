@@ -1,4 +1,5 @@
 #' ggplot2 theme original
+#' @export
 
 theme_matsuno <- function (base_size = 11,
                            base_family = "", 

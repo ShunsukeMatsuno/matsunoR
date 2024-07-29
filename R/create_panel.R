@@ -2,6 +2,8 @@
 #' @param N number of firms
 #' @param Time number of periods
 #' @param J number of groups (industries)
+#' 
+#' @export
 
 create_panel <- function(N, Time, J = 1){
   # 
