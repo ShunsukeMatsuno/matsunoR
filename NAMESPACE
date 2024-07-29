@@ -2,6 +2,8 @@
 
 export("%+%")
 export(check_key)
+export(compute_rank)
 export(create_panel)
+export(fun.drop_outlier)
 export(make_bal_panel)
 export(theme_matsuno)
