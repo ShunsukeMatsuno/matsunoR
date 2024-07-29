@@ -10,33 +10,35 @@
 #' @export
 
 check_key <- function(df, key){
-  # check if key is string or a vector of strings
-  if(!is.character(key)){
-    stop("key must be a string or a vector of strings")
+  # In messages, {key} is replaced by the input key.
+  # For example, for check_key(df, c("id", "t")), the message should display 
+  # "key (id, t) is unique" etc.
+  
+  # Check if key is string or a vector of strings
+  if (!is.character(key)) {
+    stop(paste("The key (", paste(key, collapse = ", "), ") must be a string or a vector of strings", sep = ""))
   }
   
-  # check if the key is a subset of the column names of the dataframe
-  if(!all(key %in% names(df))){
-    stop("key must be a subset of the column names of the dataframe")
+  # Check if the key is a subset of the column names of the dataframe
+  if (!all(key %in% names(df))) {
+    stop(paste("The key (", paste(key, collapse = ", "), ") must be a subset of the column names of the dataframe", sep = ""))
   }
   
-  # check if the key has at least one element
-  if(length(key) == 0){
-    stop("key must have at least one element")
+  # Check if the key has at least one element
+  if (length(key) == 0) {
+    stop(paste("The key (", paste(key, collapse = ", "), ") must have at least one element", sep = ""))
   }
   
-  # check if the key is unique
+  # Check if the key is unique
   df_duplicates <- df |> 
     dplyr::group_by(across(all_of(key))) |> 
-    dplyr::summarize(n = dplyr::n()) |>
+    dplyr::summarize(n = dplyr::n(), .groups = "drop") |>
     dplyr::filter(n > 1) 
   
-  if(NROW(df_duplicates) == 0){
-    message("The key is unique")
+  if (NROW(df_duplicates) == 0) {
+    message(paste("The key (", paste(key, collapse = ", "), ") is unique", sep = ""))
   } else {
-    message("The key is not unique. Here are the duplicates:")
+    message(paste("The key (", paste(key, collapse = ", "), ") is not unique. Here are the duplicates:", sep = ""))
     return(df_duplicates)
   }
 }
-
-
