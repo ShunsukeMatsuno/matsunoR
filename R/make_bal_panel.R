@@ -8,11 +8,13 @@
 #' 
 #' @export
 #' 
-make_bal_panel <- function(df, id, time, vars){
+make_bal_panel <- function(df, id, time, 
+                           vars){
   vars <- rlang::enquo(vars)
   
   df_bal_vars <- df |> 
-    dplyr::select(id, time, !! vars) |> 
+    dplyr::select(id, time, 
+                  !! vars) |> 
     na.omit() |> 
     BMisc::makeBalancedPanel(idname = id, tname = time) |> 
     tibble::tibble()
@@ -22,7 +24,10 @@ make_bal_panel <- function(df, id, time, vars){
   return(dplyr::left_join(df_key, df, by = c(id, time)))
 }
 
-
-
+df <- tribble(
+  ~id, ~t, ~x, ~y, ~z1, ~z2, ~z3,
+  1, 1, 1, 1, 1, 1, 1
+)
+df
 
 
