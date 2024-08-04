@@ -24,10 +24,5 @@ make_bal_panel <- function(df, id, time,
   return(dplyr::left_join(df_key, df, by = c(id, time)))
 }
 
-df <- tribble(
-  ~id, ~t, ~x, ~y, ~z1, ~z2, ~z3,
-  1, 1, 1, 1, 1, 1, 1
-)
-df
 
 
