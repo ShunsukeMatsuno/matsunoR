@@ -4,12 +4,12 @@
 \alias{preprocess_discontinuity}
 \title{Preprocess data to handle discontinuities}
 \usage{
-preprocess_discontinuity(data, vars, threshold = 0.01)
+preprocess_discontinuity(data, ..., threshold = 0.01)
 }
 \arguments{
 \item{data}{A data frame containing the variables to process.}
 
-\item{vars}{A vector of variable names (as strings) to process for discontinuities.}
+\item{...}{Unquoted variable names to process for discontinuities.}
 
 \item{threshold}{A numeric value specifying the threshold for detecting discontinuities.}
 }
@@ -17,7 +17,7 @@ preprocess_discontinuity(data, vars, threshold = 0.01)
 A data frame with `NA` introduced in the specified variables where discontinuities are detected.
 }
 \description{
-This function introduces `NA` in specified variables (`vars`) of a data frame
+This function introduces `NA` in specified variables (`...`) of a data frame
 wherever the absolute difference between consecutive values exceeds a threshold.
 }
 \examples{
