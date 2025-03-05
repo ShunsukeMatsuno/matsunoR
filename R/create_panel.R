@@ -15,19 +15,16 @@ create_panel <- function(N, Time, J = 1){
     i = rep(1:N, times = Time),
     t = rep(1:Time, each = N)
     ) %>% 
-    arrange(i, t)
+    dplry::arrange(i, t)
   
   if(J > 1){
     df_list = list()
     for(j in 1:J){
       df_list[[j]] <- df %>% mutate(j = j) 
     }
-    df <- bind_rows(df_list) %>% 
-      select(i, j, t) %>% 
-      arrange(i, t, j)
+    df <- dplyr::bind_rows(df_list) %>% 
+      dplyr::select(i, j, t) %>% 
+      dplyr::arrange(i, t, j)
   }
-  
-
-  
   return(df)
 }

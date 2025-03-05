@@ -2,10 +2,24 @@
 % Please edit documentation in R/maxmin.R
 \name{maxmin}
 \alias{maxmin}
-\title{Compute x censeored in [0,1]}
+\title{Censor values within the range [0,1]}
 \usage{
 maxmin(x)
 }
+\arguments{
+\item{x}{A numeric value or numeric vector.}
+}
+\value{
+A numeric value or vector with all elements censored within [0,1].
+}
 \description{
-Compute x censeored in [0,1]
+This function ensures that each element in `x` is constrained within the interval [0,1]. 
+If `x` is a scalar or vector, values less than 0 are replaced with 0, and values greater than 1 
+are replaced with 1.
+}
+\examples{
+maxmin(0.5)    # Returns 0.5
+maxmin(-0.2)   # Returns 0
+maxmin(1.5)    # Returns 1
+maxmin(c(-0.5, 0.2, 1.3))  # Returns c(0, 0.2, 1)
 }
