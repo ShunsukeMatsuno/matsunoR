@@ -9,9 +9,11 @@ make_bal_panel(df, id, time, vars)
 \arguments{
 \item{df}{A data frame}
 
-\item{vars}{A set of variables to be used to make the panel balanced}
+\item{id}{A unique identifier of the panel data, string}
 
-\item{key}{A unique identifier of the panel data, string}
+\item{time}{A time variable, string}
+
+\item{vars}{A set of variables to be used to make the panel balanced}
 }
 \description{
 For a given panel data, make a balanced panel using a set of variables
