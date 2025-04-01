@@ -2,19 +2,23 @@
 % Please edit documentation in R/check_key.R
 \name{check_key}
 \alias{check_key}
-\title{For a dataframe, check if a unique key is actually unique.
-Typically the data frame is a panel data and the identifier is `(year, id)`, but this works for other general cases as well}
+\title{For a dataframe, check if a unique key is actually unique.}
 \usage{
-check_key(df, key)
+check_key(df, key, showall = FALSE)
 }
 \arguments{
 \item{df}{A data frame}
 
 \item{key}{Key to check, e.g., "id", c("id", "year")}
+
+\item{showall}{Logical. If TRUE, returns all columns for duplicate rows. If FALSE (default), returns only the key columns and count.}
+}
+\value{
+If the key is unique, returns a message. If not unique, returns a dataframe of duplicates.
 }
 \description{
-For a dataframe, check if a unique key is actually unique.
-Typically the data frame is a panel data and the identifier is `(year, id)`, but this works for other general cases as well
+Typically the data frame is a panel data and the identifier is `(year, id)`, but this works for other general cases as well.
+The function returns a message indicating whether the key is unique. If not unique, it returns a dataframe showing the duplicates.
 }
 \examples{
 # A data frame with a unique key (id, year)

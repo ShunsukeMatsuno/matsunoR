@@ -1,0 +1,112 @@
+---
+title: "Sobel 1985 Simulation"
+format: 
+  html:
+    toc: false
+    number-sections: false
+execute:
+  echo: true
+  warning: false
+---
+
+# Note
+
+## Setup
+```{r setup}
+#| include: false
+knitr::opts_chunk$set(fig.showtext=TRUE)
+knitr::opts_knit$set(fig.showtext=TRUE)
+pacman::p_load(tidyverse, ggplot2, geomtextpath, latex2exp, patchwork)
+```
+
+Font
+```{r}
+setup_font <- function() {
+  # (i) Set up user fonts directory based on OS
+  if (.Platform$OS.type == "windows") {
+    user_fonts_dir <- file.path(Sys.getenv("USERPROFILE"), "Fonts")
+  } else {
+    user_fonts_dir <- file.path(Sys.getenv("HOME"), "Fonts")
+  }
+  
+  if (!dir.exists(user_fonts_dir)) {
+    dir.create(user_fonts_dir, recursive = TRUE)
+  }
+  
+  # (ii) Get the latest release info automatically from GitHub
+  # The API endpoint returns JSON data for the latest release
+  release_info <- jsonlite::fromJSON("https://api.github.com/repos/alerque/libertinus/releases/latest")
+  tag <- release_info$tag_name       # e.g., "v7.051"
+  version <- sub("^v", "", tag)       # remove the "v" to get "7.051"
+  
+  # Check if the latest version is already installed
+  font_dir <- file.path(user_fonts_dir, paste0("Libertinus-", version))
+  if (!dir.exists(font_dir)) {
+    # Construct the URL for the zip asset
+    zip_url <- paste0("https://github.com/alerque/libertinus/releases/download/", 
+                      tag, 
+                      "/Libertinus-", version, ".zip")
+    
+    # Define the destination for the downloaded zip file
+    zip_dest <- file.path(user_fonts_dir, paste0("Libertinus-", version, ".zip"))
+    
+    # Download the zip file (in binary mode)
+    download.file(zip_url, destfile = zip_dest, mode = "wb")
+    
+    # (iii) Unzip the downloaded file into the user_fonts_dir
+    # This will create a folder named "Libertinus-{version}" in the user_fonts_dir
+    unzip(zip_dest, exdir = user_fonts_dir)
+    unlink(zip_dest)    # Delete the zip folder after unzipping
+  }
+  
+  # (iv) Load the fonts using the unzipped directory.
+  # The fonts are located in "static/OTF" relative to the unzipped folder.
+  withr::with_dir(font_dir, {
+    sysfonts::font_add("Libertinus",
+                       regular = "static/OTF/LibertinusSerif-Regular.otf",
+                       italic  = "static/OTF/LibertinusSerif-Italic.otf")
+  })
+  
+  # Enable showtext to use the newly added fonts
+  showtext::showtext_auto()
+}
+
+```
+
+```{r}
+# library(showtext)
+# # Add LM Roman 10 font – replace the file path with your local file
+# setwd("C:/Users/Matsuno/font-files/Libertinus-7.051")
+# sysfonts::font_add("Libertinus",
+#          regular = "static/OTF/LibertinusSerif-Regular.otf",
+#          italic = "static/OTF/LibertinusSerif-Italic.otf"
+#          )
+# # font_add_google("Noto Serif", "Noto Serif")
+# FONT <- "Libertinus"
+# showtext_auto()
+
+setup_font()
+# showtext::showtext_auto()
+FONT <- "Libertinus"
+```
+
+## Parameters
+
+Distribution of A
+
+```{r}
+# Distribution of A
+df <- mtcars
+p <- ggplot(df, aes(mpg, hp)) +
+  geom_point() +
+  theme_minimal() +
+  theme(text = element_text(family = FONT)) +
+  annotate("text", x = 20, y = 300, label = "Hello", family = FONT)
+p
+```
+
+```{r}
+path <- matsunoR::get_script_path()
+knitr::opts_chunk$set(fig.path = path)
+ggsave(p, filename = "fig_test.pdf")
+```
