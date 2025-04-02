@@ -18,17 +18,20 @@ check_key <- function(df, key, showall = FALSE){
   
   # Check if key is string or a vector of strings
   if (!is.character(key)) {
-    stop(paste("The key (", paste(key, collapse = ", "), ") must be a string or a vector of strings", sep = ""))
+    warning(paste("The key (", paste(key, collapse = ", "), ") must be a string or a vector of strings", sep = ""))
+    return(invisible(NULL))
   }
   
   # Check if the key is a subset of the column names of the dataframe
   if (!all(key %in% names(df))) {
-    stop(paste("The key (", paste(key, collapse = ", "), ") must be a subset of the column names of the dataframe", sep = ""))
+    warning(paste("The key (", paste(key, collapse = ", "), ") must be a subset of the column names of the dataframe", sep = ""))
+    return(invisible(NULL))
   }
   
   # Check if the key has at least one element
   if (length(key) == 0) {
-    stop(paste("The key (", paste(key, collapse = ", "), ") must have at least one element", sep = ""))
+    warning(paste("The key (", paste(key, collapse = ", "), ") must have at least one element", sep = ""))
+    return(invisible(NULL))
   }
   
   # Check if the key is unique
