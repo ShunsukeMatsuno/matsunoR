@@ -13,14 +13,37 @@ compute_rank(x, n = 10)
 }
 \value{
 A numeric vector of the same length as x, with each value replaced by its rank.
+        Higher ranks (closer to n) correspond to higher values in the original data.
 }
 \description{
 This function computes the rank of each value in a vector based on quantiles.
+Higher ranks correspond to higher values in the original data.
 }
 \note{
 If the length of x is smaller than n, the function will stop and return an error.
 }
 \examples{
-fun.compute_rank(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+# Basic example - higher values get higher ranks
+compute_rank(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
+# Result: [1] 1 2 3 4 5 6 7 8 9 10
+# Notice how the highest value (10) gets the highest rank (10)
+
+# Using a different number of quantiles
+compute_rank(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), n = 4)
+# Result: [1] 1 1 1 2 2 2 3 3 3 4 4 4
+# Values are grouped into 4 ranks, with higher values getting higher ranks
+
+# With random data - higher values still get higher ranks
+set.seed(123)
+random_data <- rnorm(100)
+ranks <- compute_rank(random_data)
+# Check that higher values correspond to higher ranks
+plot(random_data, ranks, main="Original Values vs Ranks", 
+     xlab="Original Values", ylab="Ranks")
+
+# With missing values
+data_with_na <- c(1:15, NA, 17:20)
+compute_rank(data_with_na)
+# NA values are handled properly, and higher values still get higher ranks
 
 }
