@@ -1,6 +1,25 @@
 #' Create a partition of the real line
-#' @param intervals List of intervals, where each interval is a vector of 2 numbers
-#' @return A partition object
+#' 
+#' This function creates a partition of the real line by dividing it into non-overlapping intervals.
+#' The intervals must be contiguous (no holes) and non-overlapping.
+#' 
+#' @param intervals List of intervals, where each interval is a vector of 2 numbers.
+#'   Each interval is of the form [a, b) where a is included and b is excluded,
+#'   except for the last interval if it ends with Inf.
+#'   
+#' @return A partition object with class "partition" containing the sorted intervals.
+#' 
+#' @details 
+#' The function performs several validations:
+#' \itemize{
+#'   \item Checks that intervals is a non-empty list
+#'   \item Validates that each interval is a numeric vector of length 2
+#'   \item Ensures the first element of each interval is less than the second
+#'   \item Sorts intervals by their lower bounds
+#'   \item Checks for overlaps between adjacent intervals
+#'   \item Checks for holes between adjacent intervals
+#' }
+#' 
 #' @examples examples/intervals_example.R
 #' @export
 create_partition <- function(intervals) {
@@ -44,9 +63,20 @@ create_partition <- function(intervals) {
 }
 
 #' Get which interval a number falls into
-#' @param x Number to check
-#' @param partition Partition object
-#' @return A list with the index of the interval and the interval itself, or NA if not found
+#' 
+#' This function determines which interval in a partition a given number belongs to.
+#' 
+#' @param x Number to check. Must be a single numeric value.
+#' @param partition Partition object created by \code{create_partition}.
+#' 
+#' @return A list with two elements:
+#'   \item{index}{The index of the interval in the partition that contains x, or NA if not found}
+#'   \item{interval}{The interval itself as a vector of two numbers, or NA if not found}
+#'   
+#' @details
+#' The function checks if x falls within any interval in the partition.
+#' For an interval [a, b), x is considered to be in the interval if a <= x < b.
+#' 
 #' @examples
 #' p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
 #' get_interval(0.5, p)  # list(index = 1, interval = c(-Inf, 1))

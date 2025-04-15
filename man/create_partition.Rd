@@ -7,13 +7,27 @@
 create_partition(intervals)
 }
 \arguments{
-\item{intervals}{List of intervals, where each interval is a vector of 2 numbers}
+\item{intervals}{List of intervals, where each interval is a vector of 2 numbers.
+Each interval is of the form [a, b) where a is included and b is excluded,
+except for the last interval if it ends with Inf.}
 }
 \value{
-A partition object
+A partition object with class "partition" containing the sorted intervals.
 }
 \description{
-Create a partition of the real line
+This function creates a partition of the real line by dividing it into non-overlapping intervals.
+The intervals must be contiguous (no holes) and non-overlapping.
+}
+\details{
+The function performs several validations:
+\itemize{
+  \item Checks that intervals is a non-empty list
+  \item Validates that each interval is a numeric vector of length 2
+  \item Ensures the first element of each interval is less than the second
+  \item Sorts intervals by their lower bounds
+  \item Checks for overlaps between adjacent intervals
+  \item Checks for holes between adjacent intervals
+}
 }
 \examples{
 examples/intervals_example.R

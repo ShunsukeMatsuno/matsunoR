@@ -7,15 +7,21 @@
 get_interval(x, partition)
 }
 \arguments{
-\item{x}{Number to check}
+\item{x}{Number to check. Must be a single numeric value.}
 
-\item{partition}{Partition object}
+\item{partition}{Partition object created by \code{create_partition}.}
 }
 \value{
-A list with the index of the interval and the interval itself, or NA if not found
+A list with two elements:
+  \item{index}{The index of the interval in the partition that contains x, or NA if not found}
+  \item{interval}{The interval itself as a vector of two numbers, or NA if not found}
 }
 \description{
-Get which interval a number falls into
+This function determines which interval in a partition a given number belongs to.
+}
+\details{
+The function checks if x falls within any interval in the partition.
+For an interval [a, b), x is considered to be in the interval if a <= x < b.
 }
 \examples{
 p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
