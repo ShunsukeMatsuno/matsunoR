@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+
+# Examples related
+R-scripts/.quarto
+R-scripts/test_files
