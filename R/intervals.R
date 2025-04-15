@@ -20,7 +20,7 @@
 #'   \item Checks for holes between adjacent intervals
 #' }
 #' 
-#' @examples examples/intervals_example.R
+#' @example examples/intervals_example.R
 #' @export
 create_partition <- function(intervals) {
   if (!is.list(intervals) || length(intervals) == 0) {
