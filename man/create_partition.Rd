@@ -4,6 +4,7 @@
 \alias{create_partition}
 \title{Create a partition of the real line}
 \usage{
+intervals <- list(c(-Inf, 1), c(1, 2), c(2, Inf))
 create_partition(intervals)
 }
 \arguments{

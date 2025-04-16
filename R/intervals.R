@@ -8,6 +8,9 @@
 #'   except for the last interval if it ends with Inf.
 #'   
 #' @return A partition object with class "partition" containing the sorted intervals.
+#' @usage
+#' intervals <- list(c(-Inf, 1), c(1, 2), c(2, Inf))
+#' create_partition(intervals)
 #' 
 #' @details 
 #' The function performs several validations:
