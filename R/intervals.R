@@ -39,6 +39,11 @@ create_partition <- function(intervals) {
     }
   }
   
+  # if intervals has only one element (no partition), then return the interval
+  if (length(intervals) == 1) {
+    return(structure(list(intervals = intervals), class = "partition"))
+  }
+  
   # Sort intervals by their lower bounds
   sorted_intervals <- intervals[order(sapply(intervals, function(x) x[1]))]
   
