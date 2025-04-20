@@ -54,7 +54,7 @@ find_tex_font <- function(filename) {
 #' @examples
 #' \dontrun{
 #' # Set up the Libertinus font from TeX Live/MiKTeX
-#' try(setup_libertinus_texlive()) # Wrap in try in case fonts/kpsewhich aren't found
+#' try(setup_font()) # Wrap in try in case fonts/kpsewhich aren't found
 #'
 #' # Check if font was added
 #' if ("Libertinus Serif" %in% sysfonts::font_families()) {
@@ -77,7 +77,7 @@ find_tex_font <- function(filename) {
 #' }
 #' }
 #' @export
-setup_libertinus_texlive <- function() { # Renamed for clarity, or keep setup_font
+setup_font <- function() { # Renamed for clarity, or keep setup_font
 
   message("Attempting to locate Libertinus Serif fonts using kpsewhich...")
 
@@ -134,7 +134,7 @@ setup_libertinus_texlive <- function() { # Renamed for clarity, or keep setup_fo
 }
 
 # Example Usage (within the \dontrun block in documentation):
-# try(setup_libertinus_texlive())
+# try(setup_font())
 # if ("Libertinus Serif" %in% sysfonts::font_families()) {
 #   print("Libertinus Serif setup complete.")
 # }
