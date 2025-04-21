@@ -115,17 +115,17 @@ setup_font <- function() { # Renamed for clarity, or keep setup_font
   # Register the font family with sysfonts, providing the found paths
   # Note: sysfonts::font_add needs named arguments matching the style
   # We construct the arguments list dynamically based on found paths
-  font_add_args <- list(family = "Libertinus Serif")
+  font_add_args <- list(family = "Libertinus")
   font_add_args <- c(font_add_args, font_paths)
 
   # Use do.call to pass the arguments list to font_add
   do.call(sysfonts::font_add, font_add_args)
 
-  message("Successfully registered 'Libertinus Serif' font family.")
+  message("Successfully registered 'Libertinus' font family.")
 
   # Enable showtext to use the newly added fonts globally in graphics devices
   showtext::showtext_auto()
-  message("`showtext` enabled automatically. Plots will now use the registered fonts.")
+  message("`showtext` enabled automatically. Use `FONT=Libertinus` to use LIbertinus font.")
 
   # Optionally increase DPI for better rendering with showtext
   # showtext::showtext_opts(dpi = 300)
