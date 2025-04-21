@@ -125,7 +125,7 @@ setup_font <- function() { # Renamed for clarity, or keep setup_font
 
   # Enable showtext to use the newly added fonts globally in graphics devices
   showtext::showtext_auto()
-  message("`showtext` enabled automatically. Use `FONT=Libertinus` to use LIbertinus font.")
+  message("`showtext` enabled automatically. Use `FONT=Libertinus` to use Libertinus font.")
 
   # Optionally increase DPI for better rendering with showtext
   # showtext::showtext_opts(dpi = 300)
