@@ -28,11 +28,11 @@ A numeric vector of length \code{n} containing the generated grid values.
 This function creates a numeric grid that spans from a specified minimum value to a maximum value,
 with a specified number of points. A concentration parameter controls how the points are distributed.
 The grid can be generated with a higher concentration of points around:
-(i) \code{min_val} (by setting \code{center = min_val}),
-(ii) \code{max_val} (by setting \code{center = max_val}), or
-(iii) an arbitrary value between \code{min_val} and \code{max_val} (by setting \code{center} to that value).
+\itemize{
+  \item \code{min_val} (by setting \code{center = min_val})
+  \item \code{max_val} (by setting \code{center = max_val})
+  \item an arbitrary value between \code{min_val} and \code{max_val} (by setting \code{center} to that value)
 }
-\details{
 For \code{center = min_val} or \code{center = max_val}, a power transformation is used.
 For an arbitrary \code{center}, the Beta distribution quantile function is used to achieve the desired concentration.
 }

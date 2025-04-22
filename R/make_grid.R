@@ -3,16 +3,17 @@
 #' This function creates a numeric grid that spans from a specified minimum value to a maximum value,
 #' with a specified number of points. A concentration parameter controls how the points are distributed.
 #' The grid can be generated with a higher concentration of points around:
-#' (i) \code{min_val} (by setting \code{center = min_val}),
-#' (ii) \code{max_val} (by setting \code{center = max_val}), or
-#' (iii) an arbitrary value between \code{min_val} and \code{max_val} (by setting \code{center} to that value).
-#'
+#' \itemize{
+#'   \item \code{min_val} (by setting \code{center = min_val})
+#'   \item \code{max_val} (by setting \code{center = max_val})
+#'   \item An arbitrary value between \code{min_val} and \code{max_val} (by setting \code{center} to that value)
+#' }
 #' For \code{center = min_val} or \code{center = max_val}, a power transformation is used.
 #' For an arbitrary \code{center}, the Beta distribution quantile function is used to achieve the desired concentration.
 #'
 #' @param min_val A numeric value specifying the minimum value of the grid.
 #' @param max_val A numeric value specifying the maximum value of the grid.
-#' @param length An integer specifying the number of grid points to generate.
+#' @param length An integer specifying the number of grid points to generate. Default is 100.
 #' @param concentration A numeric value controlling the concentration of grid points.
 #'   For \code{center = min_val} or \code{center = max_val}, higher values yield more concentration.
 #'   For an arbitrary \code{center}, the sum of the Beta distribution parameters is proportional to \code{concentration}.
@@ -53,7 +54,7 @@
 #' grid()
 #'
 #' @export
-make_grid <- function(min_val, max_val, length, concentration = 2, center = min_val) {
+make_grid <- function(min_val, max_val, length = 100, concentration = 2, center = min_val) {
   if(center < min_val || center > max_val) {
     stop("center must be between min_val and max_val")
   }
