@@ -1,81 +1,91 @@
-#' Generate a custom grid of values with a concentration effect.
+#' Generate a grid of values, optionally concentrating around one or more points.
 #'
-#' This function creates a numeric grid that spans from a specified minimum value to a maximum value,
-#' with a specified number of points. A concentration parameter controls how the points are distributed.
-#' The grid can be generated with a higher concentration of points around:
-#' \itemize{
-#'   \item \code{min_val} (by setting \code{center = min_val})
-#'   \item \code{max_val} (by setting \code{center = max_val})
-#'   \item An arbitrary value between \code{min_val} and \code{max_val} (by setting \code{center} to that value)
-#' }
-#' For \code{center = min_val} or \code{center = max_val}, a power transformation is used.
-#' For an arbitrary \code{center}, the Beta distribution quantile function is used to achieve the desired concentration.
+#' If \code{concentration_points} is NULL or empty, returns an even grid.
+#' Otherwise we build a simple mixture density: 1 everywhere plus Gaussian bumps
+#' at each concentration point (bandwidth = 10% of the total range),
+#' with relative height given by \code{strength}.  We then warp the uniform grid
+#' by the CDF of that density so points cluster around the specified values.
 #'
-#' @param min_val A numeric value specifying the minimum value of the grid.
-#' @param max_val A numeric value specifying the maximum value of the grid.
-#' @param length An integer specifying the number of grid points to generate. Default is 100.
-#' @param concentration A numeric value controlling the concentration of grid points.
-#'   For \code{center = min_val} or \code{center = max_val}, higher values yield more concentration.
-#'   For an arbitrary \code{center}, the sum of the Beta distribution parameters is proportional to \code{concentration}.
-#'   Default is 2.
-#' @param center A numeric value between \code{min_val} and \code{max_val} specifying the value around which
-#'   the grid points will be concentrated. Default is \code{min_val}.
+#' @param min_val Numeric scalar.  Lower bound of the grid.
+#' @param max_val Numeric scalar.  Upper bound of the grid.
+#' @param length Integer.  Number of points in the returned grid.  Default 100.
+#' @param concentration_points Numeric vector of values in [min_val, max_val]
+#'   where the grid should cluster.  Default NULL.
+#' @param strength Numeric scalar ≥ 0.  Height of the Gaussians at each
+#'   concentration point, relative to the uniform baseline.  Larger → more pull.
+#'   Default 1.
 #'
-#' @return A numeric vector of length \code{n} containing the generated grid values.
+#' @return A numeric vector of length \code{length}.
 #'
 #' @examples
 #' # Set up parameters
-#' min_val <- 0
-#' max_val <- 100
-#' length <- 100
-#' concentration <- 5
+#' min_val <- -1
+#' max_val <- 5
+#' length  <- 100
 #'
-#' # Generate grids with different centers
-#' grid_min <- make_grid(min_val, max_val, length, concentration, center = min_val)
-#' grid_mid <- make_grid(min_val, max_val, length, concentration, center = 70)
-#' grid_max <- make_grid(min_val, max_val, length, concentration, center = max_val)
+#' # Uniform grid
+#' grid_uniform <- make_grid(min_val, max_val, length)
+#'
+#' # Grid concentrated around 2 and 4
+#' grid_2_4 <- make_grid(
+#'   min_val,
+#'   max_val,
+#'   length,
+#'   concentration_points = c(2, 4),
+#'   strength = 5
+#' )
 #'
 #' # Plotting the grids in separate panels
-#' par(mfrow = c(3, 1), mar = c(4, 4, 2, 1))
+#' par(mfrow = c(2, 1), mar = c(4, 4, 2, 1))
 #'
-#' # Grid concentrated near the minimum value
-#' plot(grid_min, rep(1, length), type = "b", xlim = c(min_val, max_val), 
-#'      xlab = "Grid Values", ylab = "", main = "Concentration around min_val")
+#' # Uniform grid
+#' plot(
+#'   grid_uniform, rep(1, length),
+#'   type = "b", xlim = c(min_val, max_val),
+#'   xlab = "Grid Values", ylab = "",
+#'   main = "Uniform Grid"
+#' )
 #' grid()
 #'
-#' # Grid concentrated around an arbitrary value (70)
-#' plot(grid_mid, rep(1, length), type = "b", xlim = c(min_val, max_val), 
-#'      xlab = "Grid Values", ylab = "", main = "Concentration around 70")
+#' # Grid concentrated around 2 and 4
+#' plot(
+#'   grid_2_4, rep(1, length),
+#'   type = "b", xlim = c(min_val, max_val),
+#'   xlab = "Grid Values", ylab = "",
+#'   main = "Concentration around 2 and 4"
+#' )
 #' grid()
-#'
-#' # Grid concentrated near the maximum value
-#' plot(grid_max, rep(1, length), type = "b", xlim = c(min_val, max_val), 
-#'      xlab = "Grid Values", ylab = "", main = "Concentration around max_val")
-#' grid()
-#'
+#' 
 #' @export
-make_grid <- function(min_val, max_val, length = 100, concentration = 2, center = min_val) {
-  if(center < min_val || center > max_val) {
-    stop("center must be between min_val and max_val")
+make_grid <- function(min_val, max_val,
+                      length = 100,
+                      concentration_points = NULL,
+                      strength = 1) {
+  # basic checks
+  if (!is.numeric(min_val) || !is.numeric(max_val) || min_val >= max_val)
+    stop("`min_val` and `max_val` must be numeric with min_val < max_val")
+  if (!is.numeric(length) || length < 2)
+    stop("`length` must be an integer ≥ 2")
+  if (!is.null(concentration_points)) {
+    if (any(concentration_points < min_val | concentration_points > max_val))
+      stop("All `concentration_points` must lie in [min_val, max_val]")
   }
-  
-  x <- seq(0, 1, length.out = length)
-  
-  if(center == min_val) {
-    # Concentration around min_val: power transformation
-    transformed <- x^concentration
-  } else if(center == max_val) {
-    # Concentration around max_val: reverse power transformation
-    transformed <- 1 - (1 - x)^concentration
-  } else {
-    # For an arbitrary center, use Beta quantile transformation.
-    # Normalize center to a value between 0 and 1.
-    norm_center <- (center - min_val) / (max_val - min_val)
-    # Set shape parameters so that the mode is at norm_center.
-    a <- concentration * norm_center + 1
-    b <- concentration * (1 - norm_center) + 1
-    transformed <- qbeta(x, a, b)
+  # uniform fallback
+  if (is.null(concentration_points) || length(concentration_points) == 0) {
+    return(seq(min_val, max_val, length.out = length))
   }
-  
-  min_val + transformed * (max_val - min_val)
+  # build raw support and density
+  raw_x <- seq(min_val, max_val, length.out = length)
+  dens  <- rep(1, length)
+  bw    <- (max_val - min_val) / 10
+  for (cpt in concentration_points) {
+    dens <- dens + strength * dnorm(raw_x, mean = cpt, sd = bw)
+  }
+  # compute normalized CDF
+  cum_dens <- cumsum(dens)
+  F <- (cum_dens - cum_dens[1]) / (cum_dens[length] - cum_dens[1])
+  # invert by interpolation
+  u    <- seq(0, 1, length.out = length)
+  grid <- approx(F, raw_x, xout = u, ties = "ordered")$y
+  return(grid)
 }

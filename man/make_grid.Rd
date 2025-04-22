@@ -2,68 +2,77 @@
 % Please edit documentation in R/make_grid.R
 \name{make_grid}
 \alias{make_grid}
-\title{Generate a custom grid of values with a concentration effect.}
+\title{Generate a grid of values, optionally concentrating around one or more points.}
 \usage{
-make_grid(min_val, max_val, length, concentration = 2, center = min_val)
+make_grid(
+  min_val,
+  max_val,
+  length = 100,
+  concentration_points = NULL,
+  strength = 1
+)
 }
 \arguments{
-\item{min_val}{A numeric value specifying the minimum value of the grid.}
+\item{min_val}{Numeric scalar.  Lower bound of the grid.}
 
-\item{max_val}{A numeric value specifying the maximum value of the grid.}
+\item{max_val}{Numeric scalar.  Upper bound of the grid.}
 
-\item{length}{An integer specifying the number of grid points to generate.}
+\item{length}{Integer.  Number of points in the returned grid.  Default 100.}
 
-\item{concentration}{A numeric value controlling the concentration of grid points.
-For \code{center = min_val} or \code{center = max_val}, higher values yield more concentration.
-For an arbitrary \code{center}, the sum of the Beta distribution parameters is proportional to \code{concentration}.
-Default is 2.}
+\item{concentration_points}{Numeric vector of values in [min_val, max_val]
+where the grid should cluster.  Default NULL.}
 
-\item{center}{A numeric value between \code{min_val} and \code{max_val} specifying the value around which
-the grid points will be concentrated. Default is \code{min_val}.}
+\item{strength}{Numeric scalar ≥ 0.  Height of the Gaussians at each
+concentration point, relative to the uniform baseline.  Larger → more pull.
+Default 1.}
 }
 \value{
-A numeric vector of length \code{n} containing the generated grid values.
+A numeric vector of length \code{length}.
 }
 \description{
-This function creates a numeric grid that spans from a specified minimum value to a maximum value,
-with a specified number of points. A concentration parameter controls how the points are distributed.
-The grid can be generated with a higher concentration of points around:
-\itemize{
-  \item \code{min_val} (by setting \code{center = min_val})
-  \item \code{max_val} (by setting \code{center = max_val})
-  \item an arbitrary value between \code{min_val} and \code{max_val} (by setting \code{center} to that value)
-}
-For \code{center = min_val} or \code{center = max_val}, a power transformation is used.
-For an arbitrary \code{center}, the Beta distribution quantile function is used to achieve the desired concentration.
+If \code{concentration_points} is NULL or empty, returns an even grid.
+Otherwise we build a simple mixture density: 1 everywhere plus Gaussian bumps
+at each concentration point (bandwidth = 10% of the total range),
+with relative height given by \code{strength}.  We then warp the uniform grid
+by the CDF of that density so points cluster around the specified values.
 }
 \examples{
 # Set up parameters
-min_val <- 0
-max_val <- 100
-length <- 100
-concentration <- 5
+min_val <- -1
+max_val <- 5
+length  <- 100
 
-# Generate grids with different centers
-grid_min <- make_grid(min_val, max_val, length, concentration, center = min_val)
-grid_mid <- make_grid(min_val, max_val, length, concentration, center = 70)
-grid_max <- make_grid(min_val, max_val, length, concentration, center = max_val)
+# Uniform grid
+grid_uniform <- make_grid(min_val, max_val, length)
+
+# Grid concentrated around 2 and 4
+grid_2_4 <- make_grid(
+  min_val,
+  max_val,
+  length,
+  concentration_points = c(2, 4),
+  strength = 5
+)
 
 # Plotting the grids in separate panels
-par(mfrow = c(3, 1), mar = c(4, 4, 2, 1))
+par(mfrow = c(2, 1), mar = c(4, 4, 2, 1))
 
-# Grid concentrated near the minimum value
-plot(grid_min, rep(1, length), type = "b", xlim = c(min_val, max_val), 
-     xlab = "Grid Values", ylab = "", main = "Concentration around min_val")
+# Uniform grid
+plot(
+  grid_uniform, rep(1, length),
+  type = "b", xlim = c(min_val, max_val),
+  xlab = "Grid Values", ylab = "",
+  main = "Uniform Grid"
+)
 grid()
 
-# Grid concentrated around an arbitrary value (70)
-plot(grid_mid, rep(1, length), type = "b", xlim = c(min_val, max_val), 
-     xlab = "Grid Values", ylab = "", main = "Concentration around 70")
-grid()
-
-# Grid concentrated near the maximum value
-plot(grid_max, rep(1, length), type = "b", xlim = c(min_val, max_val), 
-     xlab = "Grid Values", ylab = "", main = "Concentration around max_val")
+# Grid concentrated around 2 and 4
+plot(
+  grid_2_4, rep(1, length),
+  type = "b", xlim = c(min_val, max_val),
+  xlab = "Grid Values", ylab = "",
+  main = "Concentration around 2 and 4"
+)
 grid()
 
 }
