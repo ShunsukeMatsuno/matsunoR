@@ -7,7 +7,13 @@ Author: Shunsuke Matsuno
 Maintainer: Shunsuke Matsuno <matsuno.shunsuke@gmail.com>
 Description: Some helper functions
 License: Free
-Imports: Rcpp, RcppEigen, ggplot2
-LinkingTo: Rcpp, RcppEigen, ggplot2
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
+Imports: 
+    Rcpp,
+    RcppArmadillo,
+    ggplot2,
+    stats
 RoxygenNote: 7.3.2
 Encoding: UTF-8
