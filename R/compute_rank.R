@@ -40,7 +40,7 @@
 compute_rank <- function(x, n = 10){
 
   # return error if x is smaller than n
-  if(length(x) <= n){
+  if(length(x) < n){
     stop("The length of x is smaller than n")
   }
   
