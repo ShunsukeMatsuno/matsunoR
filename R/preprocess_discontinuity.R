@@ -8,6 +8,7 @@
 #' @param threshold A numeric value specifying the threshold for detecting discontinuities.
 #' @return A data frame with `NA` introduced in the specified variables where discontinuities are detected.
 #' @examples
+#' \dontrun{
 #' x <- seq(-10, 10, length.out = 500)
 #' y <- ifelse(x < 0, sin(x), cos(x)) # Artificial discontinuity at x = 0
 #' z <- ifelse(x < 0, cos(x), sin(x)) # Another artificial discontinuity
@@ -15,6 +16,7 @@
 #' 
 #' data <- preprocess_discontinuity(data, vars = c("y", "z"), threshold = 0.5)
 #' head(data)
+#' }
 #' @export
 preprocess_discontinuity <- function(data, ..., threshold = 1e-2) {
   

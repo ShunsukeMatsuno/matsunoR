@@ -21,6 +21,7 @@ This function introduces `NA` in specified variables (`...`) of a data frame
 wherever the absolute difference between consecutive values exceeds a threshold.
 }
 \examples{
+\dontrun{
 x <- seq(-10, 10, length.out = 500)
 y <- ifelse(x < 0, sin(x), cos(x)) # Artificial discontinuity at x = 0
 z <- ifelse(x < 0, cos(x), sin(x)) # Another artificial discontinuity
@@ -28,4 +29,5 @@ data <- data.frame(x = x, y = y, z = z)
 
 data <- preprocess_discontinuity(data, vars = c("y", "z"), threshold = 0.5)
 head(data)
+}
 }

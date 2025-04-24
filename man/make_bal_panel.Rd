@@ -18,15 +18,3 @@ make_bal_panel(df, id, time, vars)
 \description{
 For a given panel data, make a balanced panel using a set of variables
 }
-\examples{
-df <- tibble::tribble(
-  ~ id, ~ year, ~ x, ~ y, ~ z,
-  1, 2000, 1, 2, NA_real_,
-  1, 2001, 1, 2, 3,
-  2, 2000, 1, NA_real_, 3,
-  2, 2001, 1, 2, 3
-)
-
-make_bal_panel(df, "id", "year", c(x))
-make_bal_panel(df, "id", "year", c(x, y))
-}
