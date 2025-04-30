@@ -5,7 +5,7 @@
 #' @param time A time variable, string
 #' @param vars A set of variables to be used to make the panel balanced
 #'
-#' @example \donttest{examples/make_bal_panel_example.R}
+#' @example examples/make_bal_panel_example.R
 #' 
 #' @export
 make_bal_panel <- function(df, id, time, vars) {

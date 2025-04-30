@@ -1,3 +1,4 @@
+\donttest{
 df <- tibble::tribble(
   ~ id, ~ year, ~ x, ~ y, ~ z,
   1, 2000, 1, 2, NA_real_,
@@ -8,3 +9,4 @@ df <- tibble::tribble(
 
 make_bal_panel(df, "id", "year", c(x))
 make_bal_panel(df, "id", "year", c(x, y))
+}

@@ -1,3 +1,4 @@
+\dontrun{
 # Example 1: Simple partition (-∞, 1), [1, 2], [2, ∞)
 partition <- create_partition(list(
   c(-Inf, 1),
@@ -24,3 +25,4 @@ create_partition(list(
   c(1.5, 2),  # Has a hole between 1 and 1.5
   c(2, Inf)
 ))
+}

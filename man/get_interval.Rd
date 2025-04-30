@@ -9,12 +9,12 @@ get_interval(x, partition)
 \arguments{
 \item{x}{Number to check. Must be a single numeric value.}
 
-\item{partition}{Partition object created by \code{create_partition}.}
+\item{par}{|> tition Partition object created by \code{create_partition}.}
 }
 \value{
 A list with two elements:
-  \item{index}{The index of the interval in the partition that contains x, or NA if not found}
-  \item{interval}{The interval itself as a vector of two numbers, or NA if not found}
+\item{index}{The index of the interval in the partition that contains x, or NA if not found}
+\item{interval}{The interval itself as a vector of two numbers, or NA if not found}
 }
 \description{
 This function determines which interval in a partition a given number belongs to.

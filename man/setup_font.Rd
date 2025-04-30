@@ -11,12 +11,12 @@ No return value, called for side effects (registering fonts).
 }
 \description{
 This function finds the Libertinus Serif font family within your existing
-TeX Live or MiKTeX distribution using `kpsewhich` and registers it for use
-with the `showtext` package in R.
+TeX Live or MiKTeX distribution using \code{kpsewhich} and registers it for use
+with the \code{showtext} package in R.
 }
 \details{
-It assumes you have a working TeX distribution with the `libertinus-fonts`
-package installed and that the `kpsewhich` command is accessible in your PATH.
+It assumes you have a working TeX distribution with the \code{libertinus-fonts}
+package installed and that the \code{kpsewhich} command is accessible in your PATH.
 }
 \examples{
 \dontrun{

@@ -23,7 +23,7 @@
 #'   \item Checks for holes between adjacent intervals
 #' }
 #' 
-#' @example \dontrun{examples/intervals_example.R}
+#' @example examples/intervals_example.R
 #' @export
 create_partition <- function(intervals) {
   if (!is.list(intervals) || length(intervals) == 0) {
@@ -75,7 +75,7 @@ create_partition <- function(intervals) {
 #' This function determines which interval in a partition a given number belongs to.
 #' 
 #' @param x Number to check. Must be a single numeric value.
-#' @param partition Partition object created by \code{create_partition}.
+#' @param par |> tition Partition object created by \code{create_partition}.
 #' 
 #' @return A list with two elements:
 #'   \item{index}{The index of the interval in the partition that contains x, or NA if not found}

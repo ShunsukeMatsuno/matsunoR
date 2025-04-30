@@ -19,7 +19,7 @@ make_grid(
 
 \item{length}{Integer.  Number of points in the returned grid.  Default 100.}
 
-\item{concentration_points}{Numeric vector of values in [min_val, max_val]
+\item{concentration_points}{Numeric vector of values in \link{min_val, max_val}
 where the grid should cluster.  Default NULL.}
 
 \item{strength}{Numeric scalar ≥ 0.  Height of the Gaussians at each
@@ -32,7 +32,7 @@ A numeric vector of length \code{length}.
 \description{
 If \code{concentration_points} is NULL or empty, returns an even grid.
 Otherwise we build a simple mixture density: 1 everywhere plus Gaussian bumps
-at each concentration point (bandwidth = 10% of the total range),
+at each concentration point (bandwidth = 10\% of the total range),
 with relative height given by \code{strength}.  We then warp the uniform grid
 by the CDF of that density so points cluster around the specified values.
 }

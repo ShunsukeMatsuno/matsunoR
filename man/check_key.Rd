@@ -17,7 +17,7 @@ check_key(df, key, showall = FALSE)
 If the key is unique, returns a message. If not unique, returns a dataframe of duplicates.
 }
 \description{
-Typically the data frame is a panel data and the identifier is `(year, id)`, but this works for other general cases as well.
+Typically the data frame is a panel data and the identifier is \verb{(year, id)}, but this works for other general cases as well.
 The function returns a message indicating whether the key is unique. If not unique, it returns a dataframe showing the duplicates.
 }
 \examples{

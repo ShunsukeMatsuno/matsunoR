@@ -3,11 +3,11 @@
 \name{\%+\%}
 \alias{\%+\%}
 \title{Concatenate two strings
-Can take an expression in argument: (1+2) %+% " unit" returns "3 unit"}
+Can take an expression in argument: (1+2) \%+\% " unit" returns "3 unit"}
 \usage{
 s1 \%+\% s2
 }
 \description{
 Concatenate two strings
-Can take an expression in argument: (1+2) %+% " unit" returns "3 unit"
+Can take an expression in argument: (1+2) \%+\% " unit" returns "3 unit"
 }

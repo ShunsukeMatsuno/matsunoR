@@ -25,7 +25,7 @@ Computes the cumulative distribution function of a truncated normal
 distribution in a numerically stable way.
 }
 \details{
-Memo: the defualt values of `a` and `b` do not work. The only solution seems to create a wrapper of this using R. 
+Memo: the defualt values of \code{a} and \code{b} do not work. The only solution seems to create a wrapper of this using R.
 Basically, we cannot set the default values to be Inf. Now, I specify R_NegInf and R_PosInf, but these are not parsed.
 If I do not specify default values, the function is not compiled. So, this is a hacky way to make it work.
 }

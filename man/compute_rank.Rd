@@ -13,7 +13,7 @@ compute_rank(x, n = 10)
 }
 \value{
 A numeric vector of the same length as x, with each value replaced by its rank.
-        Higher ranks (closer to n) correspond to higher values in the original data.
+Higher ranks (closer to n) correspond to higher values in the original data.
 }
 \description{
 This function computes the rank of each value in a vector based on quantiles.

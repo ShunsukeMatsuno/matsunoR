@@ -14,10 +14,10 @@ preprocess_discontinuity(data, ..., threshold = 0.01)
 \item{threshold}{A numeric value specifying the threshold for detecting discontinuities.}
 }
 \value{
-A data frame with `NA` introduced in the specified variables where discontinuities are detected.
+A data frame with \code{NA} introduced in the specified variables where discontinuities are detected.
 }
 \description{
-This function introduces `NA` in specified variables (`...`) of a data frame
+This function introduces \code{NA} in specified variables (\code{...}) of a data frame
 wherever the absolute difference between consecutive values exceeds a threshold.
 }
 \examples{
