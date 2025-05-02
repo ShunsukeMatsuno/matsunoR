@@ -34,6 +34,7 @@ solve_signaling_ode <- function(fun.U,
                                 theta_range,
                                 initial_a,
                                 ...,
+                                fun.U_grad = NULL,  # Optional gradient function for fun.U
                                 n_grid = 100,
                                 method = "lsoda",
                                 zero_tol = 1e-9) {
@@ -41,14 +42,17 @@ solve_signaling_ode <- function(fun.U,
   # --- Input Validation ---
   if (!is.function(fun.U)) stop("'fun.U' must be a function.")
   # Check arity (number of arguments) - should be 4
-  if (length(formals(fun.U)) != 4) {
-    warning("Expected 'fun.U' to have arguments (theta, theta_belief, a, params).")
+  if (length(formals(fun.U)) < 3) {
+    warning("Expected 'fun.U' to have arguments (theta, theta_belief, a) or (theta, theta_belief, a, params).")
   }
   if (!is.numeric(theta_range) || length(theta_range) != 2 || theta_range[1] >= theta_range[2]) {
     stop("'theta_range' must be a numeric vector c(lower, upper) with lower < upper.")
   }
   if (!is.numeric(initial_a) || length(initial_a) != 1) {
     stop("'initial_a' must be a single numeric value.")
+  }
+  if (!is.null(fun.U_grad) && !is.function(fun.U_grad)) {
+    stop("'fun.U_grad' must be a function or NULL.")
   }
   
   # Capture additional parameters from ...
@@ -58,10 +62,25 @@ solve_signaling_ode <- function(fun.U,
   if (length(U_addl_params) == 0) {
     U_addl_params <- NULL
   }
-  
-  theta_lower <- theta_range[1]
-  theta_upper <- theta_range[2]
-  
+
+  # If fun.U_grad is not provided, use numerical differentiation to find the gradient 
+  if (is.null(fun.U_grad)) {
+    fun.U_grad <- function(theta, theta_belief, a, ...) {
+      fun.U_wrapper <- function(x) {
+        U_addl_params <- list(...)
+        do.call(fun.U, c(list(theta = x[1],
+                              theta_belief = x[2],
+                              a = x[3]), 
+                         U_addl_params))
+      }
+      numDeriv::grad(
+        func = fun.U_wrapper,
+        x = c(theta, theta_belief, a), 
+        method = "simple"
+      )
+    }
+  }
+
   # --- Define the ODE function for deSolve ---
   # This internal function calculates d(alpha)/d(theta) = - U_deriv_theta_belief / U_deriv_a
   # 'alpha' is vector of current values of alpha(theta). This corresponds to 'state' in the deSolve package.
@@ -69,44 +88,18 @@ solve_signaling_ode <- function(fun.U,
   # 'parms' is a list containing the user's U function and parameters
   # In particular, `parms` contains `fun.U`, `U_addl_params`, and `zero_tol`.
   # See `?deSolve::ode` for more details
-  ode_func_internal <- function(theta, alpha, parms) {
+  ode_func_internal <- function(theta,
+                                alpha, 
+                                parms) {
     with(as.list(c(alpha, parms)), {
-      # Define a wrapper for fun.U suitable for numDeriv::grad
-      # 'x' is the vector c(theta_belief, a) for differentiation
-      wrapper_U <- function(x, theta) {
-        theta_belief_val <- x[1]
-        a_val <- x[2]
-        # Call the user's U function
-        do.call(fun.U, c(list(theta = theta,     # fixed at the true value
-                              theta_belief = theta_belief_val,
-                              a = a_val), 
-                         U_addl_params))
-      }
-      
       # --- Calculate numerical gradient [U_theta_belief, U_a] ---
-      # Evaluate at (theta_belief = theta, a = alpha_theta)
-      grad_U <- tryCatch({
-        numDeriv::grad(
-          func = wrapper_U,
-          x = c(theta, alpha_theta),    # Point (theta_belief, a) = (theta, alpha_theta) to evaluate derivatives
-          method = "simple",
-          theta = theta    # The fixed 'theta' value (true type) for this step
-        )
-      }, error = function(e) {
-        # Handle errors during gradient calculation (e.g., fun.U returns NA/Inf)
-        warning(paste("numDeriv::grad failed at theta =", round(theta, 4),
-                      ", alpha_theta =", round(alpha_theta, 4), ". Error:", e$message), immediate. = TRUE)
-        return(c(NA_real_, NA_real_)) # Return NA gradient on error
-      })
-      
-      # Check if gradient calculation failed
-      if (any(!is.finite(grad_U))) {
-        # Stop solver by returning NA derivative if gradient is invalid
-        return(list(alpha_theta_deriv = NA_real_))
-      }
-      
-      U_deriv_theta_belief <- grad_U[1]
-      U_deriv_a <- grad_U[2]
+      # Evaluate at (theta = theta, theta_belief = theta, a = alpha_theta)
+      U_grad <- do.call(fun.U_grad, c(list(theta = theta,
+                                          theta_belief = theta,
+                                          a = alpha_theta),
+                                      U_addl_params))
+      U_deriv_theta_belief <- U_grad[2]   # Be careful about the index
+      U_deriv_a <- U_grad[3]
       
       # --- Calculate Slope alpha'(theta) = -U_theta_belief / U_deriv_a ---
       slope <- NA_real_ # Default to NA
@@ -116,13 +109,10 @@ solve_signaling_ode <- function(fun.U,
         warning(paste("Denominator U_deriv_a is near zero (val=", signif(U_deriv_a, 4),
                       ") at theta =", round(theta, 4),
                       ". Check model validity or boundary conditions."), immediate. = TRUE)
-        # If U_deriv_a is zero:
-        # - If U_theta_belief is also zero -> slope is indeterminate (0/0). Return 0 or NA? Let's use NA.
-        # - If U_theta_belief is non-zero -> slope is infinite. Return large number or NA? Let's use NA.
-        slope <- NA_real_
       } else {
         # Calculate the slope normally if U_deriv_a is non-zero
         slope <- - U_deriv_theta_belief / U_deriv_a
+        message(paste("Slope at theta =", round(theta, 4), "is", round(slope, 4)))
       }
       
       # Return the derivative(s) as a list (deSolve expects this format)
@@ -135,7 +125,7 @@ solve_signaling_ode <- function(fun.U,
   
   # --- Prepare for Solver ---
   # Grid of theta values for output
-  theta_values <- seq(from = theta_lower, to = theta_upper, length.out = n_grid)
+  theta_values <- seq(from = theta_range[1], to = theta_range[2], length.out = n_grid)
   
   # Initial state (must be named matching the state variable in ode_func_internal)
   # This defines the starting value of the dependent variable alpha(theta_lower)
