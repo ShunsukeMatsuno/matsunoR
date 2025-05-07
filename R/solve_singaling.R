@@ -2,33 +2,37 @@
 # General ODE Solver for Signaling Models based on U(theta, theta', a)
 # ---------------------------------------------------------------
 
-#' Solve the signaling ODE for strategy alpha(theta)
+#' Solve the signaling ODE for strategy \eqn{\alpha(\theta)}
 #'
-#' Numerically solves the ODE alpha'(theta) = -U_deriv_theta_belief / U_deriv_a derived from
-#' the first-order condition of the signaling game payoff U(theta, theta_belief, a).
-#' Uses numerical differentiation to find the partial derivatives of U.
+#' Numerically solves the ODE \deqn{\alpha'(\theta) = -U_{\hat{\theta}} / U_a,} derived from
+#' the first-order condition of the signaling game with payoff \eqn{U(\theta, \hat{\theta}, a)}.
+#' Uses numerical differentiation to compute the gradient of U when not provided.
 #'
 #' Be sure to read the documentation for the `deSolve` package and `?deSolve::ode` for more details.
-#'
-#' @param fun.U Function defining the payoff U(theta, theta_belief, a, params).
-#'        This MUST be defined as: fun.U(theta, theta_belief, a, params) where
-#'        theta, theta_belief, a are numeric scalars, and params is a list or NULL.
-#'        Should return a single numeric value (the payoff). 
 #' 
-#'           - theta: the true type
-#'           - theta_belief: the belief of the receiver
-#'           - a: action/signal
-#'           - params: additional parameters (optional)
-#' @param theta_range Numeric vector c(theta_lower, theta_upper) defining the type space.
-#' @param initial_a Numeric initial condition for the signal: alpha(theta_lower) = a_0.
+#'
+#' @param fun.U Function \eqn{U(\theta, \hat{\theta}, a, \text{params})} defining the payoff.
+#'        This MUST be defined as `fun.U(theta, theta_belief, a, params)` where 
+#'        `theta`, `theta_belief`, `a` are numeric scalars, and `params` is a list or `NULL`.
+#'        Should return a single numeric value (the payoff). 
+#'        \itemize{
+#'           \item{`theta`}{: the true type, \eqn{\theta}}
+#'           \item{`theta_belief`}{: the belief of the receiver, \eqn{\hat{\theta}}}
+#'           \item{`a`}{: action/signal}
+#'           \item{`params`}{: additional parameters (optional)}
+#'         }
+#' @param theta_range Numeric vector `c(theta_lower, theta_upper)` defining the type space.
+#' @param initial_a Numeric initial condition for the signal: `alpha(theta_lower) = a_0`.
 #' @param ... Further arguments to be passed to fun.U.
 #' @param n_grid Integer, the number of points for the output grid spanning theta_range. Default 101.
-#' @param method String, the integration method for deSolve::ode (e.g., "lsoda", "rk4"). Default "lsoda".
-#' @param zero_tol Numeric, the tolerance below which the denominator U_deriv_a is considered zero. Default 1e-9.
-#' @return A data frame with columns 'theta' and 'alpha_theta' representing
-#'         the numerical solution for the signaling function alpha(theta).
+#' @param method String, the integration method for `deSolve::ode (e.g., "lsoda", "rk4")`. Default "lsoda".
+#' @param zero_tol Numeric, the tolerance below which the denominator `U_deriv_a` is considered zero. Default 1e-9.
+#' @return A data frame with columns `theta` and `alpha_theta`.
+#'         The value `alpha_theta` corresponds to the signaling function \eqn{\alpha(\theta)}.
 #'         Returns NULL if the ODE solver fails. Includes attributes with input parameters.
 #' @example examples/signaling_example.R
+#' @import deSolve
+#' @seealso [deSolve::ode()]]
 #' @export
 solve_signaling_ode <- function(fun.U,
                                 theta_range,

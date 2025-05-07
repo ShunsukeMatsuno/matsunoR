@@ -2,7 +2,7 @@
 % Please edit documentation in R/solve_singaling.R
 \name{solve_signaling_ode}
 \alias{solve_signaling_ode}
-\title{Solve the signaling ODE for strategy alpha(theta)}
+\title{Solve the signaling ODE for strategy \eqn{\alpha(\theta)}}
 \usage{
 solve_signaling_ode(
   fun.U,
@@ -16,44 +16,44 @@ solve_signaling_ode(
 )
 }
 \arguments{
-\item{fun.U}{Function defining the payoff U(theta, theta_belief, a, params).
-This MUST be defined as: fun.U(theta, theta_belief, a, params) where
-theta, theta_belief, a are numeric scalars, and params is a list or NULL.
+\item{fun.U}{Function \eqn{U(\theta, \hat{\theta}, a, \text{params})} defining the payoff.
+This MUST be defined as \code{fun.U(theta, theta_belief, a, params)} where
+\code{theta}, \code{theta_belief}, \code{a} are numeric scalars, and \code{params} is a list or \code{NULL}.
 Should return a single numeric value (the payoff).
+\itemize{
+\item{\code{theta}}{: the true type, \eqn{\theta}}
+\item{\code{theta_belief}}{: the belief of the receiver, \eqn{\hat{\theta}}}
+\item{\code{a}}{: action/signal}
+\item{\code{params}}{: additional parameters (optional)}
+}}
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{      - theta: the true type
-      - theta_belief: the belief of the receiver
-      - a: action/signal
-      - params: additional parameters (optional)
-}\if{html}{\out{</div>}}}
+\item{theta_range}{Numeric vector \code{c(theta_lower, theta_upper)} defining the type space.}
 
-\item{theta_range}{Numeric vector c(theta_lower, theta_upper) defining the type space.}
-
-\item{initial_a}{Numeric initial condition for the signal: alpha(theta_lower) = a_0.}
+\item{initial_a}{Numeric initial condition for the signal: \code{alpha(theta_lower) = a_0}.}
 
 \item{...}{Further arguments to be passed to fun.U.}
 
 \item{n_grid}{Integer, the number of points for the output grid spanning theta_range. Default 101.}
 
-\item{method}{String, the integration method for deSolve::ode (e.g., "lsoda", "rk4"). Default "lsoda".}
+\item{method}{String, the integration method for \code{deSolve::ode (e.g., "lsoda", "rk4")}. Default "lsoda".}
 
-\item{zero_tol}{Numeric, the tolerance below which the denominator U_deriv_a is considered zero. Default 1e-9.}
+\item{zero_tol}{Numeric, the tolerance below which the denominator \code{U_deriv_a} is considered zero. Default 1e-9.}
 }
 \value{
-A data frame with columns 'theta' and 'alpha_theta' representing
-the numerical solution for the signaling function alpha(theta).
+A data frame with columns \code{theta} and \code{alpha_theta}.
+The value \code{alpha_theta} corresponds to the signaling function \eqn{\alpha(\theta)}.
 Returns NULL if the ODE solver fails. Includes attributes with input parameters.
 }
 \description{
-Numerically solves the ODE alpha'(theta) = -U_deriv_theta_belief / U_deriv_a derived from
-the first-order condition of the signaling game payoff U(theta, theta_belief, a).
-Uses numerical differentiation to find the partial derivatives of U.
+Numerically solves the ODE \deqn{\alpha'(\theta) = -U_{\hat{\theta}} / U_a,} derived from
+the first-order condition of the signaling game with payoff \eqn{U(\theta, \hat{\theta}, a)}.
+Uses numerical differentiation to compute the gradient of U when not provided.
 }
 \details{
 Be sure to read the documentation for the \code{deSolve} package and \code{?deSolve::ode} for more details.
 }
 \examples{
-pacman::p_load(tidyverse, ggplot2, matsunoR)
+pacman::p_load(tidyverse, ggplot2, deSolve, matsunoR)
 
 # Example 1: Simple linear cost function --------------------------------- 
 
@@ -178,7 +178,6 @@ ggplot(df, aes(x = theta)) +
 
 # Example 3: No unique solution ------------------------------------------------------
 
-# TODO: This does not run. Add error handling case when payoff_eg3 is NA.
 # Define payoff function with no unique solution
 payoff_eg3 <- function(theta, theta_belief, a, beta) {
   if (theta <= 0) return(NA_real_) # Basic safety check for invalid type
@@ -210,4 +209,7 @@ ggplot(df, aes(x = theta, y = alpha_theta, color = as.factor(initial_a))) +
   labs(x = "Type theta", y = "Signal alpha(theta)", color = "Initial signal")
 
          
+}
+\seealso{
+\code{\link[deSolve:ode]{deSolve::ode()}}]
 }

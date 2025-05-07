@@ -20,8 +20,7 @@ ode_extended(
 \item{y}{Numeric vector. The state of the system at \code{init_time}.}
 
 \item{times}{Numeric vector. All time points at which you want the solution
-returned.  Must cover \code{init_time} (i.e.\
-\code{min(times) <= init_time <= max(times)}).}
+returned.  Must cover \code{init_time} (i.e. \verb{min(times) <= init_time <= max(times)}).}
 
 \item{func}{Function defining the ODE right-hand side.  Must have signature
 \code{func(t, y, parms)} and return a \code{list} of derivatives.}
@@ -84,5 +83,5 @@ df |>
 
 }
 \seealso{
-\code{\link[deSolve]{ode}}
+\code{\link[deSolve:ode]{deSolve::ode()}}
 }

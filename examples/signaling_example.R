@@ -1,4 +1,4 @@
-pacman::p_load(tidyverse, ggplot2, matsunoR)
+pacman::p_load(tidyverse, ggplot2, deSolve, matsunoR)
 
 # Example 1: Simple linear cost function --------------------------------- 
 
@@ -123,7 +123,6 @@ ggplot(df, aes(x = theta)) +
 
 # Example 3: No unique solution ------------------------------------------------------
 
-# TODO: This does not run. Add error handling case when payoff_eg3 is NA.
 # Define payoff function with no unique solution
 payoff_eg3 <- function(theta, theta_belief, a, beta) {
   if (theta <= 0) return(NA_real_) # Basic safety check for invalid type

@@ -1,28 +1,27 @@
 #' Integrate an ODE with an arbitrary initial time
 #'
-#' A wrapper around \code{deSolve::ode} that lets you specify the initial condition
-#' \code{y} at some interior time point \code{init_time} within your \code{times} grid.
-#' The function splits the integration into a backward run (from \code{init_time} down
-#' to \code{min(times)}) and a forward run (from \code{init_time} up to \code{max(times)}),
+#' A wrapper around `deSolve::ode` that lets you specify the initial condition
+#' `y` at some interior time point `init_time` within your `times` grid.
+#' The function splits the integration into a backward run (from `init_time` down
+#' to `min(times)`) and a forward run (from `init_time` up to `max(times)`),
 #' then stitches the two results into a single, ascending-time solution.
 #'
-#' @param y Numeric vector. The state of the system at \code{init_time}.
+#' @param y Numeric vector. The state of the system at `init_time`.
 #' @param times Numeric vector. All time points at which you want the solution
-#'              returned.  Must cover \code{init_time} (i.e.\ 
-#'              \code{min(times) <= init_time <= max(times)}).
+#'              returned.  Must cover `init_time` (i.e. `min(times) <= init_time <= max(times)`).
 #' @param func Function defining the ODE right-hand side.  Must have signature
-#'             \code{func(t, y, parms)} and return a \code{list} of derivatives.
-#' @param parms Numeric or list.  Parameters passed to \code{func}.
-#' @param init_time **This is the only difference from \code{deSolve::ode}**.
-#'                  Numeric scalar.  The time within \code{times} at which
-#'                  the initial condition \code{y} applies.
-#' @param method See \code{deSolve::ode}.
-#' @param ...  Additional arguments passed on to \code{deSolve::ode}.
+#'             `func(t, y, parms)` and return a `list` of derivatives.
+#' @param parms Numeric or list.  Parameters passed to `func`.
+#' @param init_time **This is the only difference from `deSolve::ode`**.
+#'                  Numeric scalar.  The time within `times` at which
+#'                  the initial condition `y` applies.
+#' @param method See `deSolve::ode`.
+#' @param ...  Additional arguments passed on to `deSolve::ode`.
 #'
-#' @return A numeric matrix whose first column is \code{time} (in ascending order)
+#' @return A numeric matrix whose first column is `time` (in ascending order)
 #'         and whose remaining columns are the state variables.
 #'
-#' @seealso \code{\link[deSolve]{ode}}
+#' @seealso [deSolve::ode()]
 #'
 #' @examples
 #' library(deSolve); library(dplyr); library(ggplot2)
