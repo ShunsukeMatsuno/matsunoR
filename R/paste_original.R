@@ -1,6 +1,7 @@
+# For now, do not export, because it is masked by ggplot2.
+
 #' Concatenate two strings
 #' Can take an expression in argument: (1+2) %+% " unit" returns "3 unit"
-#' @export
 
 `%+%` <- function(s1, s2) {
   # Capture unevaluated expressions
