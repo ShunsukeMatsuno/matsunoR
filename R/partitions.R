@@ -92,10 +92,14 @@ create_partition <- function(intervals) {
 #' get_interval(2.5, p)  # list(index = 3, interval = c(2, Inf))
 #' @export
 get_interval <- function(x, partition) {
+  n <- length(partition$intervals)
   for (i in seq_along(partition$intervals)) {
-    interval <- partition$intervals[[i]]
-    if (x >= interval[1] && x < interval[2])
-      return(list(index = i, interval = interval))
+    iv <- partition$intervals[[i]]
+    a <- iv[1]; b <- iv[2]
+    # use x == b for the very last interval
+    if (x >= a && (x < b || (i == n && x == b))) {
+      return(list(index = i, interval = iv))
+    }
   }
   list(index = NA, interval = NA)
 }
