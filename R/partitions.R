@@ -99,3 +99,30 @@ get_interval <- function(x, partition) {
   }
   list(index = NA, interval = NA)
 }
+
+
+#' Get lengths of intervals in a partition
+#' 
+#' This function calculates the length of each interval in a partition.
+#' For intervals with infinite bounds, the length is returned as Inf.
+#' 
+#' @param partition Partition object created by \code{create_partition}.
+#' 
+#' @return A numeric vector containing the length of each interval.
+#' 
+#' @examples
+#' p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
+#' get_lengths(p)  # c(Inf, 1, Inf)
+#' 
+#' p2 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3)))
+#' get_lengths(p2)  # c(1, 1, 1)
+#' @export
+get_lengths <- function(partition) {
+  vapply(partition$intervals, function(interval) {
+    if (is.infinite(interval[1]) || is.infinite(interval[2])) {
+      Inf
+    } else {
+      interval[2] - interval[1]
+    }
+  }, numeric(1))
+}
