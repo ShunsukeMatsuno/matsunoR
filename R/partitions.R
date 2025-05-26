@@ -23,7 +23,7 @@
 #'   \item Checks for holes between adjacent intervals
 #' }
 #' 
-#' @example examples/intervals_example.R
+#' @example examples/partitions_example.R
 #' @export
 create_partition <- function(intervals) {
   if (!is.list(intervals) || length(intervals) == 0) {
@@ -68,6 +68,60 @@ create_partition <- function(intervals) {
   }
   
   structure(list(intervals = sorted_intervals), class = "partition")
+}
+
+#' Create a partition with equal-length intervals
+#' 
+#' This function creates a partition of an interval into N equal-length subintervals.
+#' 
+#' @param interval A numeric vector of length 2 representing the interval to partition
+#' @param width The desired width of each subinterval. Must divide the interval length evenly.
+#' @param N The desired number of subintervals.
+#' 
+#' @return A partition object containing the equal-length intervals
+#' 
+#' @details
+#' The function requires either \code{width} or \code{N} to be specified, but not both.
+#' If \code{width} is provided, it must divide the interval length evenly.
+#' If \code{N} is provided, the width is calculated as (interval[2] - interval[1]) / N.
+#' 
+#' @example examples/partitions_example.R
+#' @export
+create_partition_equal_lengths <- function(interval, width, N) {
+  if (!is.numeric(interval) || length(interval) != 2) {
+    stop("Interval must be a numeric vector of length 2.")
+  }
+  if (interval[1] >= interval[2]) {
+    stop("Interval must have its first element less than its second element.")
+  }
+  
+  # Check that exactly one of width or N is provided
+  if (missing(width) && missing(N)) {
+    stop("Either width or N must be provided.")
+  }
+  if (!missing(width) && !missing(N)) {
+    stop("Only one of width or N should be provided.")
+  }
+  
+  # Calculate intervals based on width or N
+  if (!missing(width)) {
+    # Check if width divides the interval length evenly
+    total_length <- interval[2] - interval[1]
+    if (!isTRUE(all.equal(total_length %% width, 0))) {
+      stop("Width must divide the interval length evenly.")
+    }
+    N <- as.integer(total_length / width)
+  } else {
+    # Calculate width based on N
+    width <- (interval[2] - interval[1]) / N
+  }
+  
+  # Create N equal-length intervals
+  intervals <- lapply(0:(N-1), function(i) {
+    c(interval[1] + i * width, interval[1] + (i + 1) * width)
+  })
+  
+  create_partition(intervals)
 }
 
 #' Get which interval a number falls into
