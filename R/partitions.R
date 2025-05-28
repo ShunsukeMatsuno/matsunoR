@@ -184,3 +184,47 @@ get_lengths <- function(partition) {
     }
   }, numeric(1))
 }
+
+
+
+#' Get the cutoffs of a partition
+#' 
+#' This function returns the cutoffs of a given partition. If the partition's endpoints are infinite, then the cutoffs exclude these points.
+#' If the endpoints are finite, then the cutoffs include these points.
+#' 
+#' @param partition Partition object created by \code{create_partition}.
+#' 
+#' @return A numeric vector containing the cutoffs of the partition.
+#' 
+#' @examples
+#' p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
+#' get_cutoffs(p)  # c(1, 2)
+#' 
+#' p2 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3)))
+#' get_cutoffs(p2)  # c(0, 1, 2, 3)
+#' @export
+get_cutoffs <- function(partition) {
+  if (!inherits(partition, "partition")) {
+    stop("Input must be a partition object created by create_partition()")
+  }
+  
+  intervals <- partition$intervals
+  n <- length(intervals)
+  
+  # Initialize vector to store cutoffs
+  cutoffs <- numeric(2 * n)
+  
+  # Extract all endpoints
+  for (i in seq_along(intervals)) {
+    cutoffs[2*i-1] <- intervals[[i]][1]
+    cutoffs[2*i] <- intervals[[i]][2]
+  }
+  
+  # Remove duplicates and sort
+  cutoffs <- unique(sort(cutoffs))
+  
+  # Remove infinite endpoints
+  cutoffs <- cutoffs[is.finite(cutoffs)]
+  
+  return(cutoffs)
+}
