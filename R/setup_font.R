@@ -1,7 +1,3 @@
-# Ensure necessary packages are loaded (or add @importFrom tags)
-# library(sysfonts)
-# library(showtext)
-
 #' Find the full path to a font file using kpsewhich
 #'
 #' Internal helper function to locate a font file within the TeX distribution.
@@ -58,19 +54,17 @@ find_tex_font <- function(filename) {
 #'
 #' # Check if font was added
 #' if ("Libertinus Serif" %in% sysfonts::font_families()) {
-#'   FONT_FAMILY <- "Libertinus Serif"
+#'   FONT <- "Libertinus"
 #'
 #'   # Use in a plot (requires ggplot2)
 #'   # library(ggplot2)
 #'   # p <- ggplot(mtcars, aes(mpg, hp)) +
 #'   #   geom_point() +
 #'   #   ggtitle("Plot using Libertinus Serif") +
-#'   #   theme_minimal(base_family = FONT_FAMILY)
+#'   #   labs(x = expression(beta)) + 
+#'   #   theme_minimal(base_family = IFONT)
 #'   #
-#'   # # Ensure showtext is active for rendering
-#'   # showtext::showtext_begin()
 #'   # print(p)
-#'   # showtext::showtext_end()
 #'
 #' } else {
 #'   message("Libertinus Serif font could not be set up.")
@@ -113,28 +107,14 @@ setup_font <- function() { # Renamed for clarity, or keep setup_font
   }
 
   # Register the font family with sysfonts, providing the found paths
-  # Note: sysfonts::font_add needs named arguments matching the style
-  # We construct the arguments list dynamically based on found paths
-  font_add_args <- list(family = "Libertinus")
-  font_add_args <- c(font_add_args, font_paths)
-
-  # Use do.call to pass the arguments list to font_add
-  do.call(sysfonts::font_add, font_add_args)
-
-  message("Successfully registered 'Libertinus' font family.")
-
+  sysfonts::font_add(family = "Libertinus", regular = font_paths$regular)
+  sysfonts::font_add(family = "Libertinus_Italic", regular = font_paths$italic)
   # Enable showtext to use the newly added fonts globally in graphics devices
   showtext::showtext_auto()
-  message("`showtext` enabled automatically. Use `FONT=Libertinus` to use Libertinus font.")
+  message("`showtext` enabled automatically. Use `FONT='Libertinus'` and `IFONT='Libertinus_Italic'` in ggplot2 themes.")
 
   # Optionally increase DPI for better rendering with showtext
   # showtext::showtext_opts(dpi = 300)
 
   invisible(NULL) # Return NULL invisibly
 }
-
-# Example Usage (within the \dontrun block in documentation):
-# try(setup_font())
-# if ("Libertinus Serif" %in% sysfonts::font_families()) {
-#   print("Libertinus Serif setup complete.")
-# }

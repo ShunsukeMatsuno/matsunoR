@@ -27,7 +27,7 @@ theme_matsuno <- function(base_size = 11,
                   axis.line = element_line(colour = "black"),
                   axis.text = element_blank(),
                   axis.ticks = element_blank(),
-                  text = element_text(family="LM Roman 10")
+                  text = element_text(family=FONT)
             )
 }
 
