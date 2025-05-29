@@ -24,6 +24,7 @@ theme_matsuno <- function(base_size = 11,
             theme(
                   panel.grid.major = element_blank(),
                   panel.grid.minor = element_blank(),
+                  axis.title.y = element_text(angle = 0, vjust = 0.5, hjust = 1),  # y-axis title upright
                   axis.line = element_line(colour = "black"),
                   axis.text = element_blank(),
                   axis.ticks = element_blank(),

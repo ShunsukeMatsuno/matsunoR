@@ -26,16 +26,16 @@ try(setup_font()) # Wrap in try in case fonts/kpsewhich aren't found
 # Check if font was added
 if ("Libertinus Serif" \%in\% sysfonts::font_families()) {
   FONT <- "Libertinus"
+  IFONT <- "Libertinus_Italic"
 
-  # Use in a plot (requires ggplot2)
-  # library(ggplot2)
-  # p <- ggplot(mtcars, aes(mpg, hp)) +
-  #   geom_point() +
-  #   ggtitle("Plot using Libertinus Serif") +
-  #   labs(x = expression(beta)) + 
-  #   theme_minimal(base_family = IFONT)
-  #
-  # print(p)
+   library(ggplot2)
+   p <- ggplot(mtcars, aes(mpg, hp)) +
+     geom_point() +
+     ggtitle("Plot using Libertinus Serif") +
+     labs(x = expression(beta)) + 
+     theme_minimal(base_family = IFONT)
+  
+   print(p)
 
 } else {
   message("Libertinus Serif font could not be set up.")

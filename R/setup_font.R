@@ -55,16 +55,16 @@ find_tex_font <- function(filename) {
 #' # Check if font was added
 #' if ("Libertinus Serif" %in% sysfonts::font_families()) {
 #'   FONT <- "Libertinus"
+#'   IFONT <- "Libertinus_Italic"
 #'
-#'   # Use in a plot (requires ggplot2)
-#'   # library(ggplot2)
-#'   # p <- ggplot(mtcars, aes(mpg, hp)) +
-#'   #   geom_point() +
-#'   #   ggtitle("Plot using Libertinus Serif") +
-#'   #   labs(x = expression(beta)) + 
-#'   #   theme_minimal(base_family = IFONT)
-#'   #
-#'   # print(p)
+#'    library(ggplot2)
+#'    p <- ggplot(mtcars, aes(mpg, hp)) +
+#'      geom_point() +
+#'      ggtitle("Plot using Libertinus Serif") +
+#'      labs(x = expression(beta)) + 
+#'      theme_minimal(base_family = IFONT)
+#'   
+#'    print(p)
 #'
 #' } else {
 #'   message("Libertinus Serif font could not be set up.")
@@ -78,9 +78,9 @@ setup_font <- function() { # Renamed for clarity, or keep setup_font
   # Define the font files needed for the Serif family
   fonts_to_find <- list(
     regular = "LibertinusSerif-Regular.otf",
-    bold = "LibertinusSerif-Bold.otf",
+    # bold = "LibertinusSerif-Bold.otf",
     italic = "LibertinusSerif-Italic.otf",
-    bolditalic = "LibertinusSerif-BoldItalic.otf"
+    math = "LibertinusMath-Regular.otf"
   )
 
   # Find paths for each font file
