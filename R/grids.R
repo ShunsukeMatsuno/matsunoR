@@ -1,4 +1,4 @@
-#' Generate a grid of values, optionally concentrating around one or more points.
+#' Create a grid of values, optionally concentrating around one or more points.
 #'
 #' If \code{concentration_points} is NULL or empty, returns an even grid.
 #' Otherwise we build a simple mixture density: 1 everywhere plus Gaussian bumps
@@ -57,7 +57,7 @@
 #' grid()
 #' 
 #' @export
-make_grid <- function(min_val, max_val,
+create_grid <- function(min_val, max_val,
                       length = 100,
                       concentration_points = NULL,
                       strength = 1) {
@@ -88,4 +88,20 @@ make_grid <- function(min_val, max_val,
   u    <- seq(0, 1, length.out = length)
   grid <- approx(F, raw_x, xout = u, ties = "ordered")$y
   return(grid)
+}
+
+
+#' @title Deprecated Alias for create_grid
+#' @description This function is an alias for \code{\link{create_grid}} and will be removed in a future version.
+#' @param ... Arguments passed to \code{\link{create_grid}}.
+#' @seealso \code{\link{create_grid}}
+#' @export
+#' @aliases create_grid
+make_grid <- function(...) {
+  # Issue a one-time warning
+  if (!exists(".make_grid_warned", envir = .GlobalEnv)) {
+    warning("The function 'make_grid' is deprecated and will be removed in a future version. Please use 'create_grid' instead. This warning will only be shown once.", call. = FALSE)
+    assign(".make_grid_warned", TRUE, envir = .GlobalEnv)
+  }
+  create_grid(...)
 }
