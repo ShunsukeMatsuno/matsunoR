@@ -155,7 +155,7 @@ get_interval <- function(x, partition) {
       return(list(index = i, interval = iv))
     }
   }
-  list(index = NA, interval = NA)
+  stop("Number does not fall within any interval in the partition")
 }
 
 
