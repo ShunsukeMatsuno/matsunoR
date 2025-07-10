@@ -29,9 +29,13 @@ the coarsest partition that is finer than both p1 and p2.
 p1 <- create_partition(list(c(0, 1), c(1, 3), c(3, 4)))
 p2 <- create_partition(list(c(0, 2), c(2, 4)))
 meet_p <- create_meet(p1, p2)  # Result: [0,1), [1,2), [2,3), [3,4)
+is_finer(meet_p, p1)  # TRUE
+is_finer(meet_p, p2)  # TRUE
 
 # Example 2
 p3 <- create_partition(list(c(0, 2), c(2, 4)))
 p4 <- create_partition(list(c(0, 1), c(1, 4)))
 meet_p2 <- create_meet(p3, p4)  # Result: [0,1), [1,2), [2,4)
+is_finer(meet_p2, p3)  # TRUE
+is_finer(meet_p2, p4)  # TRUE
 }
