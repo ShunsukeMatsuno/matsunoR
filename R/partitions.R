@@ -321,8 +321,8 @@ create_join <- function(p1, p2) {
   }
   
   # Get all cutoffs from both partitions
-  cutoffs1 <- get_cutoffs(p1, endpoints = TRUE)
-  cutoffs2 <- get_cutoffs(p2, endpoints = TRUE)
+  cutoffs1 <- get_cutoffs(p1, endpoints = TRUE) |> round(digits = 6)
+  cutoffs2 <- get_cutoffs(p2, endpoints = TRUE) |> round(digits = 6)
   
   # Check that partitions have the same domain endpoints
   if (length(cutoffs1) > 0 && length(cutoffs2) > 0) {
@@ -416,8 +416,8 @@ create_meet <- function(p1, p2) {
   }
   
   # Get all cutoffs from both partitions
-  cutoffs1 <- get_cutoffs(p1, endpoints = TRUE)
-  cutoffs2 <- get_cutoffs(p2, endpoints = TRUE)
+  cutoffs1 <- get_cutoffs(p1, endpoints = TRUE) |> round(digits = 6)
+  cutoffs2 <- get_cutoffs(p2, endpoints = TRUE) |> round(digits = 6)
   
   # Check that partitions have the same domain endpoints
   if (length(cutoffs1) > 0 && length(cutoffs2) > 0) {
