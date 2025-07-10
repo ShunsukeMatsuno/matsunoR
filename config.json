@@ -1,0 +1,21 @@
+{
+  "package_name": "matsunoR",
+  "version": "1.0",
+  "r_version": "4.0.0",
+  "build": {
+    "check_on_cran": true,
+    "run_tests": true,
+    "build_vignettes": true
+  },
+  "development": {
+    "auto_document": true,
+    "check_style": true,
+    "use_testthat": true
+  },
+  "paths": {
+    "r_scripts": "R/",
+    "examples": "examples/",
+    "man": "man/",
+    "src": "src/"
+  }
+}
