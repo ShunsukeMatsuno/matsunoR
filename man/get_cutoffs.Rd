@@ -4,22 +4,25 @@
 \alias{get_cutoffs}
 \title{Get the cutoffs of a partition}
 \usage{
-get_cutoffs(partition)
+get_cutoffs(partition, endpoints = TRUE)
 }
 \arguments{
 \item{partition}{Partition object created by \code{create_partition}.}
+
+\item{endpoints}{Logical. If TRUE (default), includes all endpoints (including infinite ones). If FALSE, excludes endpoints.}
 }
 \value{
 A numeric vector containing the cutoffs of the partition.
 }
 \description{
-This function returns the cutoffs of a given partition. If the partition's endpoints are infinite, then the cutoffs exclude these points.
-If the endpoints are finite, then the cutoffs include these points.
+This function returns the cutoffs of a given partition, including infinite endpoints
+when present. Use the endpoints parameter to control whether boundary points are included.
 }
 \examples{
 p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
-get_cutoffs(p)  # c(1, 2)
+get_cutoffs(p)  # c(-Inf, 1, 2, Inf)
 
 p2 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3)))
 get_cutoffs(p2)  # c(0, 1, 2, 3)
+get_cutoffs(p2, endpoints = FALSE)  # c(1, 2)
 }

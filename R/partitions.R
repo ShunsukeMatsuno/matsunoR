@@ -306,11 +306,12 @@ is_finer <- function(p1, p2) {
 #' appear in both partitions (common boundaries).
 #' 
 #' @examples
+#' # Example 1
 #' p1 <- create_partition(list(c(0, 1), c(1, 3), c(3, 4)))
 #' p2 <- create_partition(list(c(0, 2), c(2, 4)))
 #' join_p <- create_join(p1, p2)  # Result: [0,4)
 #' 
-#' # Another example with common boundaries
+#' # Example 2
 #' p3 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3)))
 #' p4 <- create_partition(list(c(0, 1), c(1, 3)))
 #' join_p2 <- create_join(p3, p4)  # Result: [0,1), [1,3)
@@ -401,11 +402,12 @@ create_join <- function(p1, p2) {
 #' the coarsest partition that is finer than both p1 and p2.
 #' 
 #' @examples
+#' # Example 1
 #' p1 <- create_partition(list(c(0, 1), c(1, 3), c(3, 4)))
 #' p2 <- create_partition(list(c(0, 2), c(2, 4)))
 #' meet_p <- create_meet(p1, p2)  # Result: [0,1), [1,2), [2,3), [3,4)
 #' 
-#' # Another example 
+#' # Example 2
 #' p3 <- create_partition(list(c(0, 2), c(2, 4)))
 #' p4 <- create_partition(list(c(0, 1), c(1, 4)))
 #' meet_p2 <- create_meet(p3, p4)  # Result: [0,1), [1,2), [2,4)
