@@ -193,6 +193,7 @@ get_lengths <- function(partition) {
 #' If the endpoints are finite, then the cutoffs include these points.
 #' 
 #' @param partition Partition object created by \code{create_partition}.
+#' @param endpoints Logical. If TRUE (default), includes finite endpoints. If FALSE, excludes endpoints.
 #' 
 #' @return A numeric vector containing the cutoffs of the partition.
 #' 
@@ -202,8 +203,9 @@ get_lengths <- function(partition) {
 #' 
 #' p2 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3)))
 #' get_cutoffs(p2)  # c(0, 1, 2, 3)
+#' get_cutoffs(p2, endpoints = FALSE)  # c(1, 2)
 #' @export
-get_cutoffs <- function(partition) {
+get_cutoffs <- function(partition, endpoints = TRUE) {
   if (!inherits(partition, "partition")) {
     stop("Input must be a partition object created by create_partition()")
   }
@@ -225,6 +227,11 @@ get_cutoffs <- function(partition) {
   
   # Remove infinite endpoints
   cutoffs <- cutoffs[is.finite(cutoffs)]
+  
+  # If endpoints = FALSE, remove the first and last cutoffs
+  if (!endpoints && length(cutoffs) > 2) {
+    cutoffs <- cutoffs[2:(length(cutoffs) - 1)]
+  }
   
   return(cutoffs)
 }
