@@ -124,6 +124,50 @@ create_partition_equal_lengths <- function(interval, width, N) {
   create_partition(intervals)
 }
 
+#' Create a partition from cutoff points
+#' 
+#' This function creates a partition from a vector of cutoff points by creating
+#' intervals between consecutive cutoffs.
+#' 
+#' @param cutoffs A numeric vector of cutoff points that define the boundaries
+#'   of the intervals. Must be sorted in ascending order.
+#' 
+#' @return A partition object with intervals defined by consecutive cutoffs.
+#' 
+#' @details
+#' The function creates intervals of the form [cutoffs[i], cutoffs[i+1]) for
+#' i = 1, ..., length(cutoffs)-1. The cutoffs must be sorted in ascending order.
+#' Infinite values are allowed for the first and last cutoffs.
+#' 
+#' @examples
+#' # Create partition from cutoffs
+#' cutoffs <- c(-Inf, 0, 1, 2, Inf)
+#' p <- create_partition_from_cutoffs(cutoffs)
+#' #  (-Inf, 0), [0, 1), [1, 2), [2, Inf)
+#' 
+#' # Finite cutoffs
+#' cutoffs2 <- c(0, 1, 2, 3)
+#' p2 <- create_partition_from_cutoffs(cutoffs2)
+#' #  [0, 1), [1, 2), [2, 3)
+#' @export
+create_partition_from_cutoffs <- function(cutoffs) {
+  if (!is.numeric(cutoffs) || length(cutoffs) < 2) {
+    stop("Cutoffs must be a numeric vector of length at least 2.")
+  }
+  
+  # Check if cutoffs are sorted
+  if (!all(diff(cutoffs) > 0)) {
+    stop("Cutoffs must be sorted in ascending order.")
+  }
+  
+  # Create intervals from consecutive cutoffs
+  intervals <- lapply(1:(length(cutoffs) - 1), function(i) {
+    c(cutoffs[i], cutoffs[i + 1])
+  })
+  
+  create_partition(intervals)
+}
+
 #' Get which interval a number falls into
 #' 
 #' This function determines which interval in a partition a given number belongs to.
@@ -184,7 +228,6 @@ get_lengths <- function(partition) {
     }
   }, numeric(1))
 }
-
 
 
 #' Get the cutoffs of a partition
