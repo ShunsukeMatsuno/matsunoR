@@ -21,7 +21,7 @@
 #' # Set up parameters
 #' min_val <- -1
 #' max_val <- 5
-#' length  <- 100
+#' length <- 100
 #'
 #' # Uniform grid
 #' grid_uniform <- make_grid(min_val, max_val, length)
@@ -55,20 +55,23 @@
 #'   main = "Concentration around 2 and 4"
 #' )
 #' grid()
-#' 
+#'
 #' @export
 create_grid <- function(min_val, max_val,
-                      length = 100,
-                      concentration_points = NULL,
-                      strength = 1) {
+                        length = 100,
+                        concentration_points = NULL,
+                        strength = 1) {
   # basic checks
-  if (!is.numeric(min_val) || !is.numeric(max_val) || min_val >= max_val)
+  if (!is.numeric(min_val) || !is.numeric(max_val) || min_val >= max_val) {
     stop("`min_val` and `max_val` must be numeric with min_val < max_val")
-  if (!is.numeric(length) || length < 2)
+  }
+  if (!is.numeric(length) || length < 2) {
     stop("`length` must be an integer ≥ 2")
+  }
   if (!is.null(concentration_points)) {
-    if (any(concentration_points < min_val | concentration_points > max_val))
+    if (any(concentration_points < min_val | concentration_points > max_val)) {
       stop("All `concentration_points` must lie in [min_val, max_val]")
+    }
   }
   # uniform fallback
   if (is.null(concentration_points) || length(concentration_points) == 0) {
@@ -76,8 +79,8 @@ create_grid <- function(min_val, max_val,
   }
   # build raw support and density
   raw_x <- seq(min_val, max_val, length.out = length)
-  dens  <- rep(1, length)
-  bw    <- (max_val - min_val) / 10
+  dens <- rep(1, length)
+  bw <- (max_val - min_val) / 10
   for (cpt in concentration_points) {
     dens <- dens + strength * dnorm(raw_x, mean = cpt, sd = bw)
   }
@@ -85,7 +88,7 @@ create_grid <- function(min_val, max_val,
   cum_dens <- cumsum(dens)
   F <- (cum_dens - cum_dens[1]) / (cum_dens[length] - cum_dens[1])
   # invert by interpolation
-  u    <- seq(0, 1, length.out = length)
+  u <- seq(0, 1, length.out = length)
   grid <- approx(F, raw_x, xout = u, ties = "ordered")$y
   return(grid)
 }

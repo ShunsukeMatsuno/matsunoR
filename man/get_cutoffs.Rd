@@ -20,9 +20,9 @@ when present. Use the endpoints parameter to control whether boundary points are
 }
 \examples{
 p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
-get_cutoffs(p)  # c(-Inf, 1, 2, Inf)
+get_cutoffs(p) # c(-Inf, 1, 2, Inf)
 
 p2 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3)))
-get_cutoffs(p2)  # c(0, 1, 2, 3)
-get_cutoffs(p2, endpoints = FALSE)  # c(1, 2)
+get_cutoffs(p2) # c(0, 1, 2, 3)
+get_cutoffs(p2, endpoints = FALSE) # c(1, 2)
 }

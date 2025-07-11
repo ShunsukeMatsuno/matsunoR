@@ -6,7 +6,7 @@ Date: 2025-02-10
 Author: Shunsuke Matsuno
 Maintainer: Shunsuke Matsuno <matsuno.shunsuke@gmail.com>
 Description: Some helper functions
-License: Free
+License: MIT + file LICENSE
 LinkingTo: 
     Rcpp,
     RcppArmadillo

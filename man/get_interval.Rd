@@ -25,7 +25,7 @@ For an interval [a, b), x is considered to be in the interval if a <= x < b.
 }
 \examples{
 p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
-get_interval(0.5, p)  # list(index = 1, interval = c(-Inf, 1))
-get_interval(1.5, p)  # list(index = 2, interval = c(1, 2))
-get_interval(2.5, p)  # list(index = 3, interval = c(2, Inf))
+get_interval(0.5, p) # list(index = 1, interval = c(-Inf, 1))
+get_interval(1.5, p) # list(index = 2, interval = c(1, 2))
+get_interval(2.5, p) # list(index = 3, interval = c(2, Inf))
 }

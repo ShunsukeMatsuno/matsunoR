@@ -13,23 +13,27 @@ find_tex_font <- function(filename) {
   }
 
   # Try to find the font file
-  result <- tryCatch({
-    # Use system2 for better control and capturing output/status
-    system2(kpsewhich_path, args = filename, stdout = TRUE, stderr = FALSE)
-  }, warning = function(w) {
-    # Handle cases where kpsewhich might issue a warning but still work (less common for file finding)
-    # message("Warning while running kpsewhich for ", filename, ": ", conditionMessage(w))
-    # Try to proceed if output was captured
-    system2(kpsewhich_path, args = filename, stdout = TRUE, stderr = TRUE) # Capture stderr too if needed
-  }, error = function(e) {
-    # Handle errors during the execution of kpsewhich itself
-    warning("Error running kpsewhich for ", filename, ": ", conditionMessage(e))
-    return(NULL)
-  })
+  result <- tryCatch(
+    {
+      # Use system2 for better control and capturing output/status
+      system2(kpsewhich_path, args = filename, stdout = TRUE, stderr = FALSE)
+    },
+    warning = function(w) {
+      # Handle cases where kpsewhich might issue a warning but still work (less common for file finding)
+      # message("Warning while running kpsewhich for ", filename, ": ", conditionMessage(w))
+      # Try to proceed if output was captured
+      system2(kpsewhich_path, args = filename, stdout = TRUE, stderr = TRUE) # Capture stderr too if needed
+    },
+    error = function(e) {
+      # Handle errors during the execution of kpsewhich itself
+      warning("Error running kpsewhich for ", filename, ": ", conditionMessage(e))
+      return(NULL)
+    }
+  )
 
   # Check if the command returned a non-empty path
   if (length(result) == 1 && nzchar(result) && !grepl("^(kpathsea:|!)", result)) {
-     # Basic check for kpathsea error messages
+    # Basic check for kpathsea error messages
     return(trimws(result)) # Return the cleaned path
   } else {
     warning("`kpsewhich` could not find: ", filename)
@@ -57,15 +61,14 @@ find_tex_font <- function(filename) {
 #'   FONT <- "Libertinus"
 #'   IFONT <- "Libertinus_Italic"
 #'
-#'    library(ggplot2)
-#'    p <- ggplot(mtcars, aes(mpg, hp)) +
-#'      geom_point() +
-#'      ggtitle("Plot using Libertinus Serif") +
-#'      labs(x = expression(beta)) + 
-#'      theme_minimal(base_family = IFONT)
-#'   
-#'    print(p)
+#'   library(ggplot2)
+#'   p <- ggplot(mtcars, aes(mpg, hp)) +
+#'     geom_point() +
+#'     ggtitle("Plot using Libertinus Serif") +
+#'     labs(x = expression(beta)) +
+#'     theme_minimal(base_family = IFONT)
 #'
+#'   print(p)
 #' } else {
 #'   message("Libertinus Serif font could not be set up.")
 #' }
@@ -92,18 +95,20 @@ setup_font <- function() { # Renamed for clarity, or keep setup_font
   found_any <- any(!sapply(font_paths, is.null))
 
   if (!found_any) {
-     stop("Failed to find any Libertinus Serif OTF files using kpsewhich.\n",
-          "Please ensure the 'libertinus-fonts' package is installed in your TeX distribution (TeX Live/MiKTeX)\n",
-          "and that `kpsewhich` is functioning correctly.")
+    stop(
+      "Failed to find any Libertinus Serif OTF files using kpsewhich.\n",
+      "Please ensure the 'libertinus-fonts' package is installed in your TeX distribution (TeX Live/MiKTeX)\n",
+      "and that `kpsewhich` is functioning correctly."
+    )
   } else if (!found_all_required) {
-     warning("Could not find all required Libertinus Serif styles (Regular, Italic). Proceeding with available fonts.")
-     # Filter out NULL paths for font_add
-     font_paths <- Filter(Negate(is.null), font_paths)
-     if (length(font_paths) == 0) { # Double check after filtering
-        stop("Failed to find usable Libertinus Serif OTF files.")
-     }
+    warning("Could not find all required Libertinus Serif styles (Regular, Italic). Proceeding with available fonts.")
+    # Filter out NULL paths for font_add
+    font_paths <- Filter(Negate(is.null), font_paths)
+    if (length(font_paths) == 0) { # Double check after filtering
+      stop("Failed to find usable Libertinus Serif OTF files.")
+    }
   } else {
-      message("Found required Libertinus Serif font styles.")
+    message("Found required Libertinus Serif font styles.")
   }
 
   # Register the font family with sysfonts, providing the found paths

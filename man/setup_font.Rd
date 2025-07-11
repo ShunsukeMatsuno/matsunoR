@@ -28,15 +28,14 @@ if ("Libertinus Serif" \%in\% sysfonts::font_families()) {
   FONT <- "Libertinus"
   IFONT <- "Libertinus_Italic"
 
-   library(ggplot2)
-   p <- ggplot(mtcars, aes(mpg, hp)) +
-     geom_point() +
-     ggtitle("Plot using Libertinus Serif") +
-     labs(x = expression(beta)) + 
-     theme_minimal(base_family = IFONT)
-  
-   print(p)
+  library(ggplot2)
+  p <- ggplot(mtcars, aes(mpg, hp)) +
+    geom_point() +
+    ggtitle("Plot using Libertinus Serif") +
+    labs(x = expression(beta)) +
+    theme_minimal(base_family = IFONT)
 
+  print(p)
 } else {
   message("Libertinus Serif font could not be set up.")
 }

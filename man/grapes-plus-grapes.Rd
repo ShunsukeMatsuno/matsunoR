@@ -28,18 +28,19 @@ This operator is not exported by default as it may conflict with
 ggplot2's \%+\% operator. Use matsunoR::\verb{\%+\%} if needed when both packages are loaded.
 }
 \examples{
+\dontrun{
 # Basic string concatenation
-"Hello" \%+\% " World"  # Returns "Hello World"
+"Hello" \%+\% " World" # Returns "Hello World"
 
 # With expression evaluation
-(1 + 2) \%+\% " units"  # Returns "3 units"
+(1 + 2) \%+\% " units" # Returns "3 units"
 
 # With variables
 x <- 5
 y <- 10
-"Result: " \%+\% (x + y)  # Returns "Result: 15"
+"Result: " \%+\% (x + y) # Returns "Result: 15"
 
 # Multiple concatenations
-"Value " \%+\% x \%+\% " is " \%+\% (x > 3)  # Returns "Value 5 is TRUE"
-
+"Value " \%+\% x \%+\% " is " \%+\% (x > 3) # Returns "Value 5 is TRUE"
+}
 }

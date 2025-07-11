@@ -24,7 +24,9 @@
 #' @seealso [deSolve::ode()]
 #'
 #' @examples
-#' library(deSolve); library(dplyr); library(ggplot2)
+#' library(deSolve)
+#' library(dplyr)
+#' library(ggplot2)
 #' # simple ODE: dy/dt = -0.5 * y
 #' f <- function(t, y, parms) list(-0.5 * y)
 #' # define time grid and interior init time
@@ -33,7 +35,7 @@
 #' init_y_vec <- seq(0, 3, by = 0.5)
 #'
 #' # solve for each initial y in init_y_vec, stitch results, and plot
-#' df <- tibble(init_y = init_y_vec) |> 
+#' df <- tibble(init_y = init_y_vec) |>
 #'   mutate(
 #'     res = purrr::map(
 #'       init_y,
@@ -47,42 +49,44 @@
 #'         )
 #'       )
 #'     )
-#'   ) |> 
+#'   ) |>
 #'   tidyr::unnest(res)
 #'
-#' df |> 
+#' df |>
 #'   ggplot(aes(x = time, y = y, color = factor(init_y))) +
-#'     geom_line() +
-#'     geom_vline(xintercept = init_time, lty = 2) +
-#'     geom_hline(yintercept = init_y_vec, lty = 3) +
-#'     labs(color = "init_y") +
-#'     theme_minimal()
+#'   geom_line() +
+#'   geom_vline(xintercept = init_time, lty = 2) +
+#'   geom_hline(yintercept = init_y_vec, lty = 3) +
+#'   labs(color = "init_y") +
+#'   theme_minimal()
 #'
 #' @export
-ode_extended <- function(y, times, func, parms, init_time, 
-                   method = c("lsoda", "lsode", "lsodes", 
-                                    "lsodar", "vode", "daspk",
-                                    "euler", "rk4", "ode23",
-                                    "ode45", "radau", "bdf",
-                                    "bdf_d", "adams", "impAdams",
-                                    "impAdams_d", "iteration"), ...) {
+ode_extended <- function(y, times, func, parms, init_time,
+                         method = c(
+                           "lsoda", "lsode", "lsodes",
+                           "lsodar", "vode", "daspk",
+                           "euler", "rk4", "ode23",
+                           "ode45", "radau", "bdf",
+                           "bdf_d", "adams", "impAdams",
+                           "impAdams_d", "iteration"
+                         ), ...) {
   # init_time must be one of the requested output times
   # Check if init_time is in the range of times
   if (!(init_time >= min(times) && init_time <= max(times))) {
     stop("'init_time' must be in the range of 'times'")
-  } else{
+  } else {
     times <- sort(c(times, init_time))
   }
   # split the time‐grid at init_time
   times_back <- sort(times[times <= init_time], decreasing = TRUE)
-  times_fwd  <- sort(times[times >= init_time],  decreasing = FALSE)
-  
+  times_fwd <- sort(times[times >= init_time], decreasing = FALSE)
+
   # 1) backward integration (if there is anything before init_time)
   if (length(times_back) > 1) {
     out_back <- deSolve::ode(
-      y     = y,
+      y = y,
       times = times_back,
-      func  = func,
+      func = func,
       parms = parms,
       method = method,
       ...
@@ -93,17 +97,17 @@ ode_extended <- function(y, times, func, parms, init_time,
   } else {
     out_back <- NULL
   }
-  
+
   # 2) forward integration
   out_fwd <- deSolve::ode(
-    y     = y,
+    y = y,
     times = times_fwd,
-    func  = func,
+    func = func,
     parms = parms,
     method = method,
     ...
   )
-  
+
   # 3) stitch (and clear row names)
   if (!is.null(out_back)) {
     out <- rbind(out_back, out_fwd)

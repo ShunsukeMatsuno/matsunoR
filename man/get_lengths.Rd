@@ -18,8 +18,8 @@ For intervals with infinite bounds, the length is returned as Inf.
 }
 \examples{
 p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
-get_lengths(p)  # c(Inf, 1, Inf)
+get_lengths(p) # c(Inf, 1, Inf)
 
 p2 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3)))
-get_lengths(p2)  # c(1, 1, 1)
+get_lengths(p2) # c(1, 1, 1)
 }

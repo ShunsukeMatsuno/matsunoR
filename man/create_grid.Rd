@@ -40,7 +40,7 @@ by the CDF of that density so points cluster around the specified values.
 # Set up parameters
 min_val <- -1
 max_val <- 5
-length  <- 100
+length <- 100
 
 # Uniform grid
 grid_uniform <- make_grid(min_val, max_val, length)

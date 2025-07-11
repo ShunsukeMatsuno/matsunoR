@@ -39,6 +39,6 @@ panel_groups <- create_panel(N = 2, Time = 3, J = 2)
 head(panel_groups)
 
 # Check the structure
-nrow(panel_groups)  # Should be 2 * 3 * 2 = 12 observations
+nrow(panel_groups) # Should be 2 * 3 * 2 = 12 observations
 
 }

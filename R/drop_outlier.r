@@ -12,14 +12,14 @@
 #' fun.drop_outlier(c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10))
 #'
 #' @export
-#' 
+#'
 fun.drop_outlier <- function(x, p = 0.01) {
-    # Compute the p-th and (1-p)-th percentiles
-    lower <- quantile(x, p, na.rm = TRUE)
-    upper <- quantile(x, 1 - p, na.rm = TRUE)
+  # Compute the p-th and (1-p)-th percentiles
+  lower <- quantile(x, p, na.rm = TRUE)
+  upper <- quantile(x, 1 - p, na.rm = TRUE)
 
-    # Replace outliers with NA
-    x[x < lower | x > upper] <- NA
+  # Replace outliers with NA
+  x[x < lower | x > upper] <- NA
 
-    return(x)
+  return(x)
 }

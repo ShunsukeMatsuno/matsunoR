@@ -38,8 +38,10 @@ set.seed(123)
 random_data <- rnorm(100)
 ranks <- compute_rank(random_data)
 # Check that higher values correspond to higher ranks
-plot(random_data, ranks, main="Original Values vs Ranks", 
-     xlab="Original Values", ylab="Ranks")
+plot(random_data, ranks,
+  main = "Original Values vs Ranks",
+  xlab = "Original Values", ylab = "Ranks"
+)
 
 # With missing values
 data_with_na <- c(1:15, NA, 17:20)

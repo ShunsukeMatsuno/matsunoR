@@ -47,7 +47,9 @@ to \code{min(times)}) and a forward run (from \code{init_time} up to \code{max(t
 then stitches the two results into a single, ascending-time solution.
 }
 \examples{
-library(deSolve); library(dplyr); library(ggplot2)
+library(deSolve)
+library(dplyr)
+library(ggplot2)
 # simple ODE: dy/dt = -0.5 * y
 f <- function(t, y, parms) list(-0.5 * y)
 # define time grid and interior init time
@@ -56,7 +58,7 @@ init_time <- 4
 init_y_vec <- seq(0, 3, by = 0.5)
 
 # solve for each initial y in init_y_vec, stitch results, and plot
-df <- tibble(init_y = init_y_vec) |> 
+df <- tibble(init_y = init_y_vec) |>
   mutate(
     res = purrr::map(
       init_y,
@@ -70,16 +72,16 @@ df <- tibble(init_y = init_y_vec) |>
         )
       )
     )
-  ) |> 
+  ) |>
   tidyr::unnest(res)
 
-df |> 
+df |>
   ggplot(aes(x = time, y = y, color = factor(init_y))) +
-    geom_line() +
-    geom_vline(xintercept = init_time, lty = 2) +
-    geom_hline(yintercept = init_y_vec, lty = 3) +
-    labs(color = "init_y") +
-    theme_minimal()
+  geom_line() +
+  geom_vline(xintercept = init_time, lty = 2) +
+  geom_hline(yintercept = init_y_vec, lty = 3) +
+  labs(color = "init_y") +
+  theme_minimal()
 
 }
 \seealso{

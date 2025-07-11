@@ -28,14 +28,14 @@ appear in both partitions (common boundaries).
 # Example 1
 p1 <- create_partition(list(c(0, 1), c(1, 3), c(3, 4)))
 p2 <- create_partition(list(c(0, 2), c(2, 4)))
-join_p <- create_join(p1, p2)  # Result: [0,4)
-is_finer(p1, join_p)  # TRUE
-is_finer(p2, join_p)  # TRUE
+join_p <- create_join(p1, p2) # Result: [0,4)
+is_finer(p1, join_p) # TRUE
+is_finer(p2, join_p) # TRUE
 
 # Example 2
 p3 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3)))
 p4 <- create_partition(list(c(0, 1), c(1, 3)))
-join_p2 <- create_join(p3, p4)  # Result: [0,1), [1,3)
-is_finer(p3, join_p2)  # TRUE
-is_finer(p4, join_p2)  # TRUE
+join_p2 <- create_join(p3, p4) # Result: [0,1), [1,3)
+is_finer(p3, join_p2) # TRUE
+is_finer(p4, join_p2) # TRUE
 }

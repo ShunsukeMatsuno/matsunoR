@@ -27,6 +27,6 @@ c <= a < b <= d.
 \examples{
 p1 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3), c(3, 4)))
 p2 <- create_partition(list(c(0, 2), c(2, 4)))
-is_finer(p1, p2)  # TRUE
-is_finer(p2, p1)  # FALSE
+is_finer(p1, p2) # TRUE
+is_finer(p2, p1) # FALSE
 }

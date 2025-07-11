@@ -18,8 +18,8 @@ If \code{x} is a scalar or vector, values less than 0 are replaced with 0, and v
 are replaced with 1.
 }
 \examples{
-maxmin(0.5)    # Returns 0.5
-maxmin(-0.2)   # Returns 0
-maxmin(1.5)    # Returns 1
-maxmin(c(-0.5, 0.2, 1.3))  # Returns c(0, 0.2, 1)
+maxmin(0.5) # Returns 0.5
+maxmin(-0.2) # Returns 0
+maxmin(1.5) # Returns 1
+maxmin(c(-0.5, 0.2, 1.3)) # Returns c(0, 0.2, 1)
 }
