@@ -10,3 +10,7 @@ R-scripts/test_files
 # binaries
 *.o
 *.dll
+
+# R package build artifacts
+*.tar.gz
+*.Rcheck/
