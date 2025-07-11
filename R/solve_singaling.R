@@ -87,28 +87,51 @@ solve_signaling_ode <- function(fun.U,
 
   # --- Define the ODE function for deSolve ---
   # This internal function calculates d(alpha)/d(theta) = - U_deriv_theta_belief / U_deriv_a
-  # 'alpha' is vector of current values of alpha(theta). This corresponds to 'state' in the deSolve package.
-  # The name of the vector inside of alpha is `alpha_theta`. So, `alpha_theta` inside of this function uses the value of current alpha.
-  # 'parms' is a list containing the user's U function and parameters
-  # In particular, `parms` contains `fun.U`, `U_addl_params`, and `zero_tol`.
-  # See `?deSolve::ode` for more details
+  # 
+  # deSolve::ode() requires a specific function signature: func(time, y, parms)
+  # In our case:
+  # - 'theta' plays the role of 'time' (the independent variable we integrate over)
+  # - 'alpha' plays the role of 'y' (the dependent variable/state vector)
+  # - 'parms' contains our user-provided functions and parameters
+  #
+  # The 'alpha' argument is a NAMED vector. We initialize it as c(alpha_theta = initial_a)
+  # so inside this function, alpha_theta refers to the current value of the signal function
+  # at the current theta value.
+  #
+  # The function must return a list where the first element is a vector of derivatives
+  # with the same names as the input state vector.
   ode_func_internal <- function(theta,
                                 alpha, 
                                 parms) {
+    # Extract variables from the state vector and parameters
+    # with() makes alpha_theta, fun.U, U_addl_params, zero_tol available in scope
     with(as.list(c(alpha, parms)), {
-      # --- Calculate numerical gradient [U_theta_belief, U_a] ---
-      # Evaluate at (theta = theta, theta_belief = theta, a = alpha_theta)
+      
+      # --- Calculate numerical gradient [U_theta, U_theta_belief, U_a] ---
+      # We need partial derivatives of U with respect to its arguments
+      # The gradient function returns a vector: [dU/dtheta, dU/dtheta_belief, dU/da]
+      # We evaluate at the "truthful" equilibrium point: theta_belief = theta
+      # and at the current signal level: a = alpha_theta
       U_grad <- do.call(fun.U_grad, c(list(theta = theta,
-                                          theta_belief = theta,
-                                          a = alpha_theta),
+                                          theta_belief = theta,  # Truthful belief
+                                          a = alpha_theta),      # Current signal
                                       U_addl_params))
-      U_deriv_theta_belief <- U_grad[2]   # Be careful about the index
+      
+      # Extract the relevant partial derivatives
+      # Index [1] = dU/dtheta (not needed for the ODE)
+      # Index [2] = dU/dtheta_belief (this is what we need in numerator)
+      # Index [3] = dU/da (this is what we need in denominator)
+      U_deriv_theta_belief <- U_grad[2]   
       U_deriv_a <- U_grad[3]
       
-      # --- Calculate Slope alpha'(theta) = -U_theta_belief / U_deriv_a ---
-      slope <- NA_real_ # Default to NA
+      # --- Calculate Slope: alpha'(theta) = -U_theta_belief / U_a ---
+      # This comes from the first-order condition of the signaling game
+      # The sender chooses signal 'a' to maximize U(theta, receiver's belief, a)
+      # In equilibrium, the receiver's belief equals the true type: theta_belief = theta
+      slope <- NA_real_ # Default to NA in case of division by zero
       
       # Check if U_deriv_a (denominator) is effectively zero
+      # If the payoff function is not sensitive to the signal, we can't solve the ODE
       if (abs(U_deriv_a) < zero_tol) {
         warning(paste("Denominator U_deriv_a is near zero (val=", signif(U_deriv_a, 4),
                       ") at theta =", round(theta, 4),
@@ -119,30 +142,41 @@ solve_signaling_ode <- function(fun.U,
         message(paste("Slope at theta =", round(theta, 4), "is", round(slope, 4)))
       }
       
-      # Return the derivative(s) as a list (deSolve expects this format)
-      # "The return value of func should be a list, whose first element is a vector 
-      # containing the derivatives of y with respect to time, and whose next elements 
-      # are global values that are required at each point in times."
+      # --- Return derivatives in deSolve format ---
+      # deSolve expects: list(c(dy1/dt, dy2/dt, ...), global_values...)
+      # We have only one state variable alpha_theta, so we return its derivative
+      # The name "alpha_theta_deriv" is just for clarity; deSolve uses position matching
       return(list(c(alpha_theta_deriv = slope)))
     })
   } # End of ode_func_internal definition
   
   # --- Prepare for Solver ---
-  # Grid of theta values for output
+  # Create grid of theta values where we want to evaluate the solution
+  # This becomes the 'times' argument for deSolve::ode
   theta_values <- seq(from = theta_range[1], to = theta_range[2], length.out = n_grid)
   
-  # Initial state (must be named matching the state variable in ode_func_internal)
-  # This defines the starting value of the dependent variable alpha(theta_lower)
+  # Initial state vector - MUST be named to match what ode_func_internal expects
+  # This defines the boundary condition: alpha(theta_lower) = initial_a
+  # The name "alpha_theta" will be used inside ode_func_internal via with()
   alpha <- c(alpha_theta = initial_a)
   
-  # Parameters list to pass THROUGH the ODE solver TO ode_func_internal
+  # Parameters list to pass to ode_func_internal
+  # deSolve::ode will pass this 'parms' argument to our internal function
+  # Include everything the internal function needs: user's U function, parameters, tolerance
   solver_params <- list(
-    fun.U = fun.U,
-    U_addl_params = U_addl_params,
-    zero_tol = zero_tol
+    fun.U = fun.U,                    # User's payoff function
+    fun.U_grad = fun.U_grad,          # Gradient function (analytical or numerical)
+    U_addl_params = U_addl_params,    # Additional parameters for U function
+    zero_tol = zero_tol               # Tolerance for denominator check
   )
   
   # --- Solve the ODE ---
+  # Call deSolve::ode with our carefully constructed arguments
+  # y = initial state vector (alpha_theta = initial_a)
+  # times = theta values where we want the solution
+  # func = our internal ODE function
+  # parms = parameters for the internal function
+  # method = numerical integration method
   solution <- tryCatch({
     deSolve::ode(
       y = alpha,
@@ -154,7 +188,7 @@ solve_signaling_ode <- function(fun.U,
   }, error = function(e) {
     message("ODE solver 'deSolve::ode' failed.")
     message("Error message: ", e$message)
-    # Consider checking single-crossing property if solver fails.
+    message("Common causes: invalid payoff function, numerical instability, or boundary conditions.")
     return(NULL) # Return NULL on failure
   })
   
@@ -162,16 +196,27 @@ solve_signaling_ode <- function(fun.U,
   if (is.null(solution)) {
     return(NULL)
   } else {
+    # Convert solution matrix to data frame
     solution_df <- as.data.frame(solution)
-    colnames(solution_df)[1] <- "theta" # Rename 'time' column from ode output
-    # Check if any NAs were produced during solving (e.g., due to U_deriv_a=0 or grad errors)
-    if(any(!is.finite(solution_df$signal_a))) {
+    
+    # deSolve::ode returns a matrix with first column named "time"
+    # We rename it to "theta" since that's our independent variable
+    colnames(solution_df)[1] <- "theta"
+    
+    # Check if any NAs or infinite values were produced during solving
+    # This can happen if U_deriv_a = 0 or if there are numerical issues
+    if(any(!is.finite(solution_df$alpha_theta))) {
       warning("NA or Infinite values produced during ODE solution. Results may be incomplete or invalid.", call.=FALSE)
     }
-    # Add input parameters as attributes for context
+    
+    # Add input parameters as attributes for reference
+    # This helps users understand what parameters were used
     attr(solution_df, "theta_range") <- theta_range
     attr(solution_df, "initial_a") <- initial_a
     attr(solution_df, "U_addl_params") <- U_addl_params
+    attr(solution_df, "method") <- method
+    attr(solution_df, "n_grid") <- n_grid
+    
     return(solution_df)
   }
   
