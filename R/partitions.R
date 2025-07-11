@@ -25,7 +25,7 @@
 #' 
 #' @example examples/partitions_example.R
 #' @export
-create_partition <- function(intervals) {
+create_partition <- function(intervals, tol = .Machine$double.eps^0.5) {
   if (!is.list(intervals) || length(intervals) == 0) {
     stop("Intervals must be a non-empty list.")
   }
@@ -34,8 +34,8 @@ create_partition <- function(intervals) {
     if (!is.numeric(interval) || length(interval) != 2) {
       stop("Each interval must be a numeric vector of length 2.")
     }
-    if (interval[1] >= interval[2]) {
-      stop("Each interval must have its first element less than its second element.")
+    if ((interval[1] - interval[2]) >= -tol) {
+      stop("Each interval must have its first element less than its second element (within floating point tolerance).")
     }
   }
   
@@ -52,15 +52,15 @@ create_partition <- function(intervals) {
     current <- sorted_intervals[[i]]
     next_interval <- sorted_intervals[[i + 1]]
     
-    # Check for overlap
-    if (current[2] > next_interval[1]) {
+    # Check for overlap (allowing for floating point tolerance)
+    if ((current[2] - next_interval[1]) > tol) {
       stop("Intervals must not overlap. Found overlap between [", 
            current[1], ", ", current[2], "] and [", 
            next_interval[1], ", ", next_interval[2], "].")
     }
     
-    # Check for holes
-    if (current[2] != next_interval[1]) {
+    # Check for holes (allowing for floating point tolerance)
+    if (abs(current[2] - next_interval[1]) > tol) {
       stop("Intervals must not have holes. Found hole between [", 
            current[1], ", ", current[2], "] and [", 
            next_interval[1], ", ", next_interval[2], "].")
