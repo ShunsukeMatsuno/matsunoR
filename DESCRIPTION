@@ -14,7 +14,20 @@ Imports:
     Rcpp,
     RcppArmadillo,
     ggplot2,
-    stats
+    stats,
+    deSolve,
+    numDeriv,
+    dplyr,
+    tibble,
+    tidyselect,
+    rlang,
+    purrr,
+    BMisc,
+    showtext,
+    sysfonts,
+    rstudioapi,
+    magrittr,
+    utils
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Encoding: UTF-8
