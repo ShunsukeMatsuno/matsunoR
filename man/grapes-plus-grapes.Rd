@@ -2,12 +2,44 @@
 % Please edit documentation in R/paste_original.R
 \name{\%+\%}
 \alias{\%+\%}
-\title{Concatenate two strings
-Can take an expression in argument: (1+2) \%+\% " unit" returns "3 unit"}
+\title{String concatenation operator with expression evaluation}
 \usage{
 s1 \%+\% s2
 }
+\arguments{
+\item{s1}{First string or expression to concatenate}
+
+\item{s2}{Second string or expression to concatenate}
+}
+\value{
+A character string containing the concatenated result
+}
 \description{
-Concatenate two strings
-Can take an expression in argument: (1+2) \%+\% " unit" returns "3 unit"
+This infix operator concatenates two strings after evaluating any expressions
+in the arguments. It's useful for building strings that include computed values.
+}
+\details{
+The operator evaluates both arguments as expressions before converting them
+to characters and concatenating. This allows for dynamic string construction
+with computed values.
+}
+\note{
+This operator is not exported by default as it may conflict with
+ggplot2's \%+\% operator. Use matsunoR::\verb{\%+\%} if needed when both packages are loaded.
+}
+\examples{
+# Basic string concatenation
+"Hello" \%+\% " World"  # Returns "Hello World"
+
+# With expression evaluation
+(1 + 2) \%+\% " units"  # Returns "3 units"
+
+# With variables
+x <- 5
+y <- 10
+"Result: " \%+\% (x + y)  # Returns "Result: 15"
+
+# Multiple concatenations
+"Value " \%+\% x \%+\% " is " \%+\% (x > 3)  # Returns "Value 5 is TRUE"
+
 }

@@ -2,17 +2,43 @@
 % Please edit documentation in R/create_panel.R
 \name{create_panel}
 \alias{create_panel}
-\title{create a balance panel}
+\title{Create a balanced panel dataset}
 \usage{
 create_panel(N, Time, J = 1)
 }
 \arguments{
-\item{N}{number of firms}
+\item{N}{Integer. Number of firms (cross-sectional units).}
 
-\item{Time}{number of periods}
+\item{Time}{Integer. Number of time periods.}
 
-\item{J}{number of groups (industries)}
+\item{J}{Integer. Number of groups (industries). Default is 1.}
+}
+\value{
+A data frame with columns:
+\item{i}{Firm identifier (1 to N)}
+\item{t}{Time period identifier (1 to Time)}
+\item{j}{Group identifier (1 to J), only included if J > 1}
 }
 \description{
-create a balance panel
+This function creates a balanced panel dataset with specified numbers of firms,
+time periods, and optionally groups (industries). All firms are observed in
+all time periods.
+}
+\details{
+The function creates a balanced panel where every firm appears in every time period.
+When J > 1, the panel is replicated for each group, creating J separate groups
+of N firms each observed over Time periods.
+}
+\examples{
+# Create a simple panel with 3 firms over 4 time periods
+panel_simple <- create_panel(N = 3, Time = 4)
+head(panel_simple)
+
+# Create a panel with 2 firms, 3 time periods, and 2 groups
+panel_groups <- create_panel(N = 2, Time = 3, J = 2)
+head(panel_groups)
+
+# Check the structure
+nrow(panel_groups)  # Should be 2 * 3 * 2 = 12 observations
+
 }
