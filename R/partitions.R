@@ -189,11 +189,11 @@ create_partition_from_cutoffs <- function(cutoffs) {
 #'
 #' @examples
 #' p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
-#' get_interval(0.5, p) # list(index = 1, interval = c(-Inf, 1))
-#' get_interval(1.5, p) # list(index = 2, interval = c(1, 2))
-#' get_interval(2.5, p) # list(index = 3, interval = c(2, Inf))
+#' which_interval(0.5, p) # list(index = 1, interval = c(-Inf, 1))
+#' which_interval(1.5, p) # list(index = 2, interval = c(1, 2))
+#' which_interval(2.5, p) # list(index = 3, interval = c(2, Inf))
 #' @export
-get_interval <- function(x, partition) {
+which_interval <- function(x, partition) {
   n <- length(partition$intervals)
   for (i in seq_along(partition$intervals)) {
     iv <- partition$intervals[[i]]
@@ -205,6 +205,17 @@ get_interval <- function(x, partition) {
     }
   }
   stop("Number does not fall within any interval in the partition")
+}
+
+#' @rdname which_interval
+#' @export
+get_interval <- function(x, partition) {
+  # Issue a one-time warning
+  if (!exists(".get_interval_warned", envir = .GlobalEnv)) {
+    .Deprecated("which_interval", package = "matsunoR", msg = "get_interval() is deprecated. Use which_interval() instead.")
+    assign(".get_interval_warned", TRUE, envir = .GlobalEnv)
+  }
+  return(which_interval(x, partition))
 }
 
 
@@ -232,6 +243,36 @@ get_lengths <- function(partition) {
       interval[2] - interval[1]
     }
   }, numeric(1))
+}
+
+
+#' Calculate the mesh norm of a partition
+#'
+#' This function calculates the mesh norm of a partition, which is the maximum
+#' length of any subinterval in the partition. For partitions with infinite
+#' intervals, the mesh norm will be Inf.
+#'
+#' @param partition Partition object created by \code{create_partition}.
+#'
+#' @return A numeric value representing the mesh norm (maximum interval length).
+#'
+#' @examples
+#' p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
+#' mesh_norm(p) # Inf (due to infinite intervals)
+#'
+#' p2 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3)))
+#' mesh_norm(p2) # 1 (all intervals have length 1)
+#'
+#' p3 <- create_partition(list(c(0, 0.5), c(0.5, 1), c(1, 2)))
+#' mesh_norm(p3) # 1 (maximum length is 1)
+#' @export
+mesh_norm <- function(partition) {
+  if (!inherits(partition, "partition")) {
+    stop("Input must be a partition object created by create_partition()")
+  }
+
+  lengths <- get_lengths(partition)
+  return(max(lengths))
 }
 
 
