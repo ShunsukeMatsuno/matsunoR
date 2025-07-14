@@ -6,6 +6,9 @@
 \usage{
 update_pkgs(exclude_pkg = "arrow")
 }
+\arguments{
+\item{exclude_pkg}{Character vector of package names to exclude from updates}
+}
 \description{
-This function updates all packages except for \code{arrow}.
+This function checks for package updates, lists them, and asks for user confirmation.
 }
