@@ -26,3 +26,23 @@ ptruncnorm_cpp <- function(x, mean = 0.0, sd = 1.0, a, b) {
     .Call(`_matsunoR_ptruncnorm_cpp`, x, mean, sd, a, b)
 }
 
+#' Simple numerical integration using trapezoidal rule
+#'
+#' High-performance C++ implementation using simple trapezoidal rule.
+#' Fast and straightforward integration for smooth functions.
+#'
+#' @param f R function to integrate
+#' @param lower Lower bound of integration
+#' @param upper Upper bound of integration
+#' @param n Number of subdivisions (default: 1000)
+#'
+#' @return List containing:
+#' \\itemize{
+#'   \\item value: The integral value
+#'   \\item subdivisions: Number of subdivisions used
+#' }
+#' @export
+integrate_cpp <- function(f, lower, upper, n = 1000L) {
+    .Call(`_matsunoR_integrate_cpp`, f, lower, upper, n)
+}
+

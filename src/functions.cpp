@@ -82,3 +82,66 @@ NumericVector ptruncnorm_cpp(NumericVector x, double mean = 0.0, double sd = 1.0
     
     return res;
 }
+
+//' Simple numerical integration using trapezoidal rule
+//'
+//' High-performance C++ implementation using simple trapezoidal rule.
+//' Fast and straightforward integration for smooth functions.
+//'
+//' @param f R function to integrate
+//' @param lower Lower bound of integration
+//' @param upper Upper bound of integration
+//' @param n Number of subdivisions (default: 1000)
+//'
+//' @return List containing:
+//' \\itemize{
+//'   \\item value: The integral value
+//'   \\item subdivisions: Number of subdivisions used
+//' }
+//' @export
+// [[Rcpp::export]]
+List integrate_cpp(Function f, double lower, double upper, int n = 1000) {
+    
+    // Handle infinite bounds
+    if(!std::isfinite(lower) || !std::isfinite(upper)) {
+        stop("Infinite bounds not supported in current implementation");
+    }
+    
+    if(lower >= upper) {
+        stop("Lower bound must be less than upper bound");
+    }
+    
+    if(n <= 0) {
+        stop("Number of subdivisions must be positive");
+    }
+    
+    // Calculate step size
+    double dx = (upper - lower) / n;
+    
+    // Create x values
+    NumericVector x_vals(n + 1);
+    for(int i = 0; i <= n; i++) {
+        x_vals[i] = lower + i * dx;
+    }
+    
+    // Evaluate function at all points
+    NumericVector f_vals = as<NumericVector>(f(x_vals));
+    
+    // Check for NA values
+    for(int i = 0; i < f_vals.length(); i++) {
+        if(NumericVector::is_na(f_vals[i])) {
+            stop("Function evaluation returned NA during integration");
+        }
+    }
+    
+    // Apply trapezoidal rule: sum of (f(i) + f(i+1)) * dx / 2
+    double integral = 0.0;
+    for(int i = 0; i < n; i++) {
+        integral += dx * (f_vals[i] + f_vals[i + 1]) / 2.0;
+    }
+    
+    return List::create(
+        _["value"] = integral,
+        _["subdivisions"] = n
+    );
+}

@@ -26,9 +26,24 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// integrate_cpp
+List integrate_cpp(Function f, double lower, double upper, int n);
+RcppExport SEXP _matsunoR_integrate_cpp(SEXP fSEXP, SEXP lowerSEXP, SEXP upperSEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Function >::type f(fSEXP);
+    Rcpp::traits::input_parameter< double >::type lower(lowerSEXP);
+    Rcpp::traits::input_parameter< double >::type upper(upperSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(integrate_cpp(f, lower, upper, n));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 static const R_CallMethodDef CallEntries[] = {
     {"_matsunoR_ptruncnorm_cpp", (DL_FUNC) &_matsunoR_ptruncnorm_cpp, 5},
+    {"_matsunoR_integrate_cpp", (DL_FUNC) &_matsunoR_integrate_cpp, 4},
     {NULL, NULL, 0}
 };
 
