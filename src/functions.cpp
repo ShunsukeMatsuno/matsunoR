@@ -5,7 +5,7 @@
 using namespace Rcpp;
 
 // [[Rcpp::depends(RcppArmadillo)]]
-//' @useDynLib matsunoR
+//' @useDynLib matsunoR, .registration = TRUE
 //' @import Rcpp
  
 //' Calculate truncated normal cumulative distribution function
