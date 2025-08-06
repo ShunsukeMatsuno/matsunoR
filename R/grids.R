@@ -74,7 +74,9 @@ create_grid <- function(min_val, max_val,
     }
   }
   # uniform fallback
-  if (is.null(concentration_points) || length(concentration_points) == 0) {
+  if (is.null(concentration_points) ||
+    length(concentration_points) == 0 ||
+    strength == 0) {
     return(seq(min_val, max_val, length.out = length))
   }
   # build raw support and density

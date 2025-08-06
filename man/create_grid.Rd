@@ -24,7 +24,7 @@ where the grid should cluster.  Default NULL.}
 
 \item{strength}{Numeric scalar ≥ 0.  Height of the Gaussians at each
 concentration point, relative to the uniform baseline.  Larger → more pull.
-Default 1.}
+If 0, the grid is uniform. Default 1.}
 }
 \value{
 A numeric vector of length \code{length}.
