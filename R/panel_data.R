@@ -66,17 +66,17 @@ create_panel <- function(N, Time, J = 1) {
   return(df)
 }
 
-#' For a given panel data, make a balanced panel using a set of variables
+#' For a given panel data, create a balanced panel using a set of variables
 #'
 #' @param df A data frame
 #' @param id A unique identifier of the panel data, string
 #' @param time A time variable, string
-#' @param vars A set of variables to be used to make the panel balanced
+#' @param vars A set of variables to be used to create the panel balanced
 #'
-#' @example examples/make_bal_panel_example.R
+#' @example examples/create_bal_panel_example.R
 #'
 #' @export
-make_bal_panel <- function(df, id, time, vars) {
+create_bal_panel <- function(df, id, time, vars) {
   vars <- rlang::enquo(vars)
 
   # Convert "" and strings that trim to "." to NA for all character columns
@@ -107,4 +107,11 @@ make_bal_panel <- function(df, id, time, vars) {
     dplyr::select(!!rlang::sym(id), !!rlang::sym(time))
 
   return(dplyr::left_join(df_key, df, by = c(id, time)))
+}
+
+#' @rdname create_bal_panel
+#' @export
+make_bal_panel <- function(df, id, time, vars) {
+  .Deprecated("create_bal_panel", package = "matsunoR")
+  return(create_bal_panel(df, id, time, vars))
 }

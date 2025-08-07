@@ -7,6 +7,6 @@ df <- tibble::tribble(
   2, 2001, 1, 2, 3
 )
 
-make_bal_panel(df, "id", "year", c(x))
-make_bal_panel(df, "id", "year", c(x, y))
+create_bal_panel(df, "id", "year", c(x))
+create_bal_panel(df, "id", "year", c(x, y))
 }
