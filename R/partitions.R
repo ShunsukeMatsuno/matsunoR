@@ -245,6 +245,25 @@ get_lengths <- function(partition) {
   }, numeric(1))
 }
 
+#' Get the number of intervals in a partition
+#'
+#' This function returns the number of intervals in a partition.
+#'
+#' @param partition Partition object created by \code{create_partition}.
+#'
+#' @return A numeric value containing the number of intervals.
+#'
+#' @examples
+#' p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
+#' get_n_intervals(p) # 3
+#'
+#' p2 <- create_partition(list(c(0, 1), c(1, 2), c(2, 3)))
+#' get_n_intervals(p2) # 3
+#' @export
+get_n_intervals <- function(partition) {
+  length(partition$intervals)
+}
+
 
 #' Calculate the mesh norm of a partition
 #'
