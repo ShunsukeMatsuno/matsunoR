@@ -5,14 +5,14 @@
 \alias{get_interval}
 \title{Get which interval a number falls into}
 \usage{
-which_interval(x, partition)
+which_interval(x, partition, right.continuous = TRUE)
 
 get_interval(x, partition)
 }
 \arguments{
 \item{x}{Number to check. Must be a single numeric value.}
 
-\item{par}{|> tition Partition object created by \code{create_partition}.}
+\item{partition}{Partition object created by \code{create_partition}.}
 }
 \value{
 A list with two elements:
@@ -21,6 +21,7 @@ A list with two elements:
 }
 \description{
 This function determines which interval in a partition a given number belongs to.
+Default is right-continuous intervals, but right-continuous intervals can be specified.
 }
 \details{
 The function checks if x falls within any interval in the partition.
@@ -31,4 +32,9 @@ p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
 which_interval(0.5, p) # list(index = 1, interval = c(-Inf, 1))
 which_interval(1.5, p) # list(index = 2, interval = c(1, 2))
 which_interval(2.5, p) # list(index = 3, interval = c(2, Inf))
+
+# Example where the error occurs (x not in any interval)
+p2 <- create_partition(list(c(0, 1), c(1, 3)))
+try(which_interval(3.5, p2)) # Error: Number 1.5 does not fall within any interval in the partition.
+
 }

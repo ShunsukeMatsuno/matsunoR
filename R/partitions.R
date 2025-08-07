@@ -175,9 +175,10 @@ create_partition_from_cutoffs <- function(cutoffs) {
 #' Get which interval a number falls into
 #'
 #' This function determines which interval in a partition a given number belongs to.
+#' Default is right-continuous intervals, but right-continuous intervals can be specified.
 #'
 #' @param x Number to check. Must be a single numeric value.
-#' @param par |> tition Partition object created by \code{create_partition}.
+#' @param partition Partition object created by \code{create_partition}.
 #'
 #' @return A list with two elements:
 #'   \item{index}{The index of the interval in the partition that contains x, or NA if not found}
@@ -192,19 +193,41 @@ create_partition_from_cutoffs <- function(cutoffs) {
 #' which_interval(0.5, p) # list(index = 1, interval = c(-Inf, 1))
 #' which_interval(1.5, p) # list(index = 2, interval = c(1, 2))
 #' which_interval(2.5, p) # list(index = 3, interval = c(2, Inf))
+#'
+#' # Example where the error occurs (x not in any interval)
+#' p2 <- create_partition(list(c(0, 1), c(1, 3)))
+#' try(which_interval(3.5, p2)) # Error: Number 1.5 does not fall within any interval in the partition.
+#'
 #' @export
-which_interval <- function(x, partition) {
+which_interval <- function(x, partition, right.continuous = TRUE) {
   n <- length(partition$intervals)
   for (i in seq_along(partition$intervals)) {
     iv <- partition$intervals[[i]]
     a <- iv[1]
     b <- iv[2]
     # use x == b for the very last interval
-    if (x >= a && (x < b || (i == n && x == b))) {
-      return(list(index = i, interval = iv))
+    if (right.continuous) {
+      # Right continuous intervals: ..., [1,2), [2,3), ...
+      if (x >= a && (x < b || (i == n && x == b))) {
+        return(list(index = i, interval = iv))
+      }
+    } else {
+      # Left continuous intervals: ..., (1,2], (2,3], ...
+      if (x > a && (x <= b || (i == n && x == b))) {
+        return(list(index = i, interval = iv))
+      }
     }
   }
-  stop("Number does not fall within any interval in the partition")
+  stop(
+    sprintf(
+      "Number %s does not fall within any interval in the partition.\n Partition intervals: %s",
+      as.character(x),
+      paste(
+        vapply(partition$intervals, function(iv) sprintf("[%s, %s)", iv[1], iv[2]), character(1)),
+        collapse = ", "
+      )
+    )
+  )
 }
 
 #' @rdname which_interval
