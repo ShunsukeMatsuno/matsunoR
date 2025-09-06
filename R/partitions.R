@@ -34,7 +34,7 @@ create_partition <- function(intervals, tol = .Machine$double.eps^0.5) {
     if (!is.numeric(interval) || length(interval) != 2) {
       stop("Each interval must be a numeric vector of length 2.")
     }
-    if ((interval[1] - interval[2]) >= -tol) {
+    if ((interval[2] - interval[1]) <= tol) {
       stop("Each interval must have its first element less than its second element (within floating point tolerance).")
     }
   }
