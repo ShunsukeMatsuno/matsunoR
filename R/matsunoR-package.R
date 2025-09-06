@@ -1,4 +1,4 @@
 ## usethis namespace: start
-#' @useDynLib matsunoR, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
 #' @useDynLib matsunoR, .registration = TRUE
 ## usethis namespace: end
