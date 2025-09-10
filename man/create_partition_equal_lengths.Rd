@@ -22,7 +22,7 @@ This function creates a partition of an interval into N equal-length subinterval
 \details{
 The function requires either \code{width} or \code{N} to be specified, but not both.
 If \code{width} is provided, it must divide the interval length evenly.
-If \code{N} is provided, the width is calculated as (interval\link{2} - interval\link{1}) / N.
+If \code{N} is provided, the width is calculated as \code{(interval[2] - interval[1]) / N}.
 }
 \examples{
 \dontrun{

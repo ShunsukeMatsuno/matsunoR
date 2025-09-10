@@ -87,7 +87,7 @@ create_partition <- function(intervals, tol = .Machine$double.eps^0.5) {
 #' @details
 #' The function requires either \code{width} or \code{N} to be specified, but not both.
 #' If \code{width} is provided, it must divide the interval length evenly.
-#' If \code{N} is provided, the width is calculated as (interval[2] - interval[1]) / N.
+#' If \code{N} is provided, the width is calculated as \code{(interval[2] - interval[1]) / N}.
 #'
 #' @example examples/partitions_example.R
 #' @export
@@ -139,7 +139,7 @@ create_partition_equal_lengths <- function(interval, width, N) {
 #' @return A partition object with intervals defined by consecutive cutoffs.
 #'
 #' @details
-#' The function creates intervals of the form [cutoffs[i], cutoffs[i+1]) for
+#' The function creates intervals of the form \code{[cutoffs[i], cutoffs[i+1])} for
 #' i = 1, ..., length(cutoffs)-1. The cutoffs must be sorted in ascending order.
 #' Infinite values are allowed for the first and last cutoffs.
 #'
