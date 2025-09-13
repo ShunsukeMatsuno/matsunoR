@@ -19,7 +19,7 @@ create_grid(
 
 \item{length}{Integer.  Number of points in the returned grid.  Default 100.}
 
-\item{concentration_points}{Numeric vector of values in \code{[min_val, max_val]}
+\item{concentration_points}{Numeric vector of values in \code{\[min_val, max_val\]}
 where the grid should cluster.  Default NULL.}
 
 \item{strength}{Numeric scalar ≥ 0.  Height of the Gaussians at each

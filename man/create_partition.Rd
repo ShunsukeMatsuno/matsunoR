@@ -9,7 +9,7 @@ create_partition(intervals)
 }
 \arguments{
 \item{intervals}{List of intervals, where each interval is a vector of 2 numbers.
-Each interval is of the form [a, b) where a is included and b is excluded,
+Each interval is of the form \eqn{[a, b)} where a is included and b is excluded,
 except for the last interval if it ends with Inf.}
 }
 \value{

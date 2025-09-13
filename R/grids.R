@@ -9,7 +9,7 @@
 #' @param min_val Numeric scalar.  Lower bound of the grid.
 #' @param max_val Numeric scalar.  Upper bound of the grid.
 #' @param length Integer.  Number of points in the returned grid.  Default 100.
-#' @param concentration_points Numeric vector of values in \code{[min_val, max_val]}
+#' @param concentration_points Numeric vector of values in \code{\[min_val, max_val\]}
 #'   where the grid should cluster.  Default NULL.
 #' @param strength Numeric scalar ≥ 0.  Height of the Gaussians at each
 #'   concentration point, relative to the uniform baseline.  Larger → more pull.

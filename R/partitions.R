@@ -4,7 +4,7 @@
 #' The intervals must be contiguous (no holes) and non-overlapping.
 #'
 #' @param intervals List of intervals, where each interval is a vector of 2 numbers.
-#'   Each interval is of the form [a, b) where a is included and b is excluded,
+#'   Each interval is of the form \eqn{[a, b)} where a is included and b is excluded,
 #'   except for the last interval if it ends with Inf.
 #'
 #' @return A partition object with class "partition" containing the sorted intervals.
