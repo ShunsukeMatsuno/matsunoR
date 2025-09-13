@@ -4,7 +4,7 @@
 \alias{exec_time}
 \title{Measure and pretty-print execution time}
 \usage{
-exec_time(expr, s_digits = 2, day_digits = 1, speedup = FALSE)
+exec_time(expr, s_digits = 2, day_digits = 1)
 }
 \arguments{
 \item{expr}{Expression to evaluate. Wrap in braces \code{{}} for multiple statements.}
@@ -12,11 +12,6 @@ exec_time(expr, s_digits = 2, day_digits = 1, speedup = FALSE)
 \item{s_digits}{Integer. Decimal places when formatting seconds. Default is 2.}
 
 \item{day_digits}{Integer. Decimal places when formatting days. Default is 1.}
-
-\item{speedup}{Logical. If TRUE, prints the speedup ratio (user/elapsed).
-This ratio is most meaningful when parallel child processes are used (e.g.,
-futures or forked workers); on purely serial code it is typically near 1.
-Default is FALSE.}
 }
 \value{
 Invisibly returns a list with elements:
@@ -48,8 +43,8 @@ f <- function(n) mean(rt(1e6, df = 4))
 # set up parallel plan
 future::plan(future::multicore, workers = 4)
 # time the function with and without parallel
-exec_time(furrr::future_map(1:8, f, .options = furrr::furrr_options(seed = TRUE)), speedup = TRUE)
-exec_time(purrr::map(1:8, f), speedup = TRUE)
+exec_time(furrr::future_map(1:8, f, .options = furrr::furrr_options(seed = TRUE)))
+exec_time(purrr::map(1:8, f))
 # reset parallel plan
 future::plan(future::sequential)
 }

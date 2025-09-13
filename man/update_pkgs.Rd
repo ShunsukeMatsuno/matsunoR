@@ -16,8 +16,3 @@ This function checks for package updates, lists them, and asks for user confirma
 
 This function checks for package updates, lists them, and asks for user confirmation.
 }
-\examples{
-update_pkgs() # Update all packages except "arrow"
-update_pkgs(exclude_pkg = c("arrow", "dplyr")) # Exclude "arrow" and "dplyr"
-
-}

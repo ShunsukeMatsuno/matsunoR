@@ -6,10 +6,6 @@
 #' @param expr Expression to evaluate. Wrap in braces `{}` for multiple statements.
 #' @param s_digits Integer. Decimal places when formatting seconds. Default is 2.
 #' @param day_digits Integer. Decimal places when formatting days. Default is 1.
-#' @param speedup Logical. If TRUE, prints the speedup ratio (user/elapsed).
-#'   This ratio is most meaningful when parallel child processes are used (e.g.,
-#'   futures or forked workers); on purely serial code it is typically near 1.
-#'   Default is FALSE.
 #'
 #' @return Invisibly returns a list with elements:
 #'   \itemize{
@@ -36,15 +32,15 @@
 #' # set up parallel plan
 #' future::plan(future::multicore, workers = 4)
 #' # time the function with and without parallel
-#' exec_time(furrr::future_map(1:8, f, .options = furrr::furrr_options(seed = TRUE)), speedup = TRUE)
-#' exec_time(purrr::map(1:8, f), speedup = TRUE)
+#' exec_time(furrr::future_map(1:8, f, .options = furrr::furrr_options(seed = TRUE)))
+#' exec_time(purrr::map(1:8, f))
 #' # reset parallel plan
 #' future::plan(future::sequential)
 #' }
 #'
 #' @seealso base::system.time
 #' @export
-exec_time <- function(expr, s_digits = 2, day_digits = 1, speedup = FALSE) {
+exec_time <- function(expr, s_digits = 2, day_digits = 1) {
   t <- system.time(expr)
 
   # Extract raw timings (in seconds)
@@ -94,10 +90,8 @@ exec_time <- function(expr, s_digits = 2, day_digits = 1, speedup = FALSE) {
   for (i in seq_len(nrow(df))) {
     cat(sprintf("%-*s  %-*s\n", w_metric, df$metric[i], w_time, df$time[i]))
   }
-  if (speedup) {
-    cat(sprintf("speedup: %s x\n",
-                if (is.finite(ratio_user_elapsed)) format(round(ratio_user_elapsed, s_digits), trim = TRUE) else "Inf"))
-  }
+  cat(sprintf("speedup: %s x\n",
+              if (is.finite(ratio_user_elapsed)) format(round(ratio_user_elapsed, s_digits), trim = TRUE) else "Inf"))
 
   # Return detailed values invisibly for programmatic use
   invisible(list(times_sec = c(user = time_user, system = time_system, elapsed = time_elapsed),
@@ -109,11 +103,6 @@ exec_time <- function(expr, s_digits = 2, day_digits = 1, speedup = FALSE) {
 #' This function checks for package updates, lists them, and asks for user confirmation.
 #'
 #' @param exclude_pkg Character vector of package names to exclude from updates
-#'
-#' @examples
-#' update_pkgs() # Update all packages except "arrow"
-#' update_pkgs(exclude_pkg = c("arrow", "dplyr")) # Exclude "arrow" and "dplyr"
-#'
 #' @export
 update_pkgs <- function(exclude_pkg = "arrow") {
   cat("Checking for package updates...\n")
