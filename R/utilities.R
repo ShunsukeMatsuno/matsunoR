@@ -144,6 +144,9 @@ update_pkgs <- function(exclude_pkg = "arrow") {
   # Default to "Y" if empty response
   if (response == "" || tolower(response) == "y" || tolower(response) == "yes") {
     cat("Updating packages...\n")
+    # original package
+    try(remotes::install_github("ShunsukeMatsuno/matsunoR", upgrade = "never"))
+    # update other packages
     update.packages(ask = FALSE, build = TRUE, oldPkgs = outdated_df$Package)
     cat("Package updates completed.\n")
   } else {
