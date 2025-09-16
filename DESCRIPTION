@@ -1,8 +1,8 @@
 Package: matsunoR
 Type: Package
 Title: Some helper functions
-Version: 1.0
-Date: 2025-02-10
+Version: 1.1
+Date: 2025-09-10
 Author: Shunsuke Matsuno
 Maintainer: Shunsuke Matsuno <matsuno.shunsuke@gmail.com>
 Description: Some helper functions

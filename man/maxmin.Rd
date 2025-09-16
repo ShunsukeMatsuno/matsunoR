@@ -2,7 +2,7 @@
 % Please edit documentation in R/maxmin.R
 \name{maxmin}
 \alias{maxmin}
-\title{Censor values within the range \eqn{[0,1]}}
+\title{Censor values within the range \eqn{[0, 1]}}
 \usage{
 maxmin(x)
 }
@@ -10,10 +10,10 @@ maxmin(x)
 \item{x}{A numeric value or numeric vector.}
 }
 \value{
-A numeric value or vector with all elements censored within \eqn{[0,1]}.
+A numeric value or vector with all elements censored within \eqn{[0, 1]}.
 }
 \description{
-This function ensures that each element in \code{x} is constrained within the interval \eqn{[0,1]}.
+This function ensures that each element in \code{x} is constrained within the interval \eqn{[0, 1]}.
 If \code{x} is a scalar or vector, values less than 0 are replaced with 0, and values greater than 1
 are replaced with 1.
 }
