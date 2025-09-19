@@ -74,6 +74,7 @@ exec_time <- function(expr, s_digits = 2, day_digits = 1) {
   # Table for display
   df <- data.frame(
     metric = c("system", "user", "elapsed"),
+    name = c("system", "cpu total", "elapsed"),
     time   = c(fmt_time(time_system), fmt_time(time_user), fmt_time(time_elapsed)),
     stringsAsFactors = FALSE
   )
@@ -88,7 +89,7 @@ exec_time <- function(expr, s_digits = 2, day_digits = 1) {
   ruler    <- paste0(strrep("-", w_metric), "  ", strrep("-", w_time))
   cat(header, "\n", ruler, "\n", sep = "")
   for (i in seq_len(nrow(df))) {
-    cat(sprintf("%-*s  %-*s\n", w_metric, df$metric[i], w_time, df$time[i]))
+    cat(sprintf("%-*s  %-*s\n", w_metric, df$name[i], w_time, df$time[i]))
   }
   cat(sprintf("speedup: %s x\n",
               if (is.finite(ratio_user_elapsed)) format(round(ratio_user_elapsed, s_digits), trim = TRUE) else "Inf"))
