@@ -4,7 +4,7 @@
 \alias{exec_time}
 \title{Measure and pretty-print execution time}
 \usage{
-exec_time(expr, s_digits = 2, day_digits = 1)
+exec_time(expr, s_digits = 2, day_digits = 1, show_system = FALSE)
 }
 \arguments{
 \item{expr}{Expression to evaluate. Wrap in braces \code{{}} for multiple statements.}
@@ -12,27 +12,36 @@ exec_time(expr, s_digits = 2, day_digits = 1)
 \item{s_digits}{Integer. Decimal places when formatting seconds. Default is 2.}
 
 \item{day_digits}{Integer. Decimal places when formatting days. Default is 1.}
+
+\item{show_system}{Logical. If \code{TRUE}, print the system time row. Default is \code{FALSE}.}
 }
 \value{
 Invisibly returns a list with elements:
 \itemize{
 \item{times_sec}{Named numeric vector \code{c(user, system, elapsed)} in seconds}
-\item{display}{Data frame printed to console with human-readable times}
-\item{speedup}{\code{user / elapsed} ratio (\code{Inf} if user time is zero)}
+\item{display}{Data frame printed to console with human-readable times.
+Rows are \code{cpu} and \code{elapsed} (and \code{system} when \code{show_system = TRUE}).}
+\item{speedup}{\code{user / elapsed} ratio (\code{Inf} if elapsed is zero)}
 }
 }
 \description{
 Measures user, system, and elapsed time for an expression, prints a
 compact human-readable summary, and invisibly returns the raw timings.
+When \code{show_system = FALSE}, the printed summary omits the system row.
+The returned values always include system time.
 }
 \details{
 This is a light wrapper around \code{base::system.time()}. Durations are
 formatted as milliseconds when < 1s, seconds up to a minute, minutes and
 seconds up to an hour, hours and minutes up to a day, and days otherwise.
+The printed table labels user CPU time as \code{cpu}.
 }
 \examples{
 # simple example
 exec_time(runif(1e7) |> mad())
+
+# include system time in the printed summary
+exec_time(runif(1e7) |> mad(), show_system = TRUE)
 
 # checking speedup (parallel) -- heavy; not run on CRAN
 \dontrun{
