@@ -4,6 +4,10 @@
 .Ruserdata
 matsunoR.Rproj
 
+# Rcpp automatically generated read-only files
+R/RcppExports.R
+src/RcppExports.cpp
+
 # Examples related
 R-scripts/.quarto
 R-scripts/test_files

@@ -19,7 +19,7 @@
 #'   }
 #'
 #' @details
-#' This is a light wrapper around \code{base::system.time()}. Durations are
+#' This is a light wrapper around `base::system.time()`. Durations are
 #' formatted as milliseconds when < 1s, seconds up to a minute, minutes and
 #' seconds up to an hour, hours and minutes up to a day, and days otherwise.
 #' The printed table labels user CPU time as `cpu`.
@@ -51,10 +51,10 @@
 exec_time <- function(expr, s_digits = 2, day_digits = 1, show_system = FALSE) {
   t <- system.time(expr)
   
-  # Extract raw timings (in seconds)
-  time_user    <- unname(t[[1]] + t[[4]])
-  time_system  <- unname(t[[2]] + t[[5]])
-  time_elapsed <- unname(t[[3]])
+  # Extract raw timings (in seconds), robust to NA child times
+  time_user    <- sum(unname(t[["user.self"]]), unname(t[["user.child"]]), na.rm = TRUE)
+  time_system  <- sum(unname(t[["sys.self"]]),  unname(t[["sys.child"]]),  na.rm = TRUE)
+  time_elapsed <- unname(t[["elapsed"]])
   
   # Helper to format durations into human-readable strings
   fmt_time <- function(sec) {
@@ -114,6 +114,8 @@ exec_time <- function(expr, s_digits = 2, day_digits = 1, show_system = FALSE) {
     speedup   = ratio_user_elapsed
   ))
 }
+
+
 #' Update all packages
 #'
 #' This function checks for package updates, lists them, and asks for user confirmation.
