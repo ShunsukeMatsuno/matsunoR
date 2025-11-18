@@ -18,8 +18,9 @@ This function creates a partition from a vector of cutoff points by creating
 intervals between consecutive cutoffs.
 }
 \details{
-The function creates intervals of the form \code{[cutoffs[i], cutoffs[i+1])} for
-i = 1, ..., length(cutoffs)-1. The cutoffs must be sorted in ascending order.
+The function creates intervals of the form \verb{[cutoffs[i], cutoffs[i+1])} for
+\verb{i = 1, ..., length(cutoffs)-1}.
+The cutoffs must be sorted in ascending order.
 Infinite values are allowed for the first and last cutoffs.
 }
 \examples{

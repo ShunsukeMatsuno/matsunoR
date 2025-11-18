@@ -12,7 +12,7 @@ get_interval(x, partition)
 \arguments{
 \item{x}{Number to check. Must be a single numeric value.}
 
-\item{partition}{Partition object created by \code{create_partition}.}
+\item{partition}{Partition object created by \link{create_partition}.}
 }
 \value{
 A list with two elements:
@@ -25,7 +25,7 @@ Default is right-continuous intervals, but right-continuous intervals can be spe
 }
 \details{
 The function checks if x falls within any interval in the partition.
-For an interval [a, b), x is considered to be in the interval if a <= x < b.
+For an interval \eqn{[a, b)}, x is considered to be in the interval if \eqn{a <= x < b}.
 }
 \examples{
 p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))

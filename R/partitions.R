@@ -85,9 +85,9 @@ create_partition <- function(intervals, tol = .Machine$double.eps^0.5) {
 #' @return A partition object containing the equal-length intervals
 #'
 #' @details
-#' The function requires either \code{width} or \code{N} to be specified, but not both.
-#' If \code{width} is provided, it must divide the interval length evenly.
-#' If \code{N} is provided, the width is calculated as \code{(interval[2] - interval[1]) / N}.
+#' The function requires either `width` or `N` to be specified, but not both.
+#' If `width` is provided, it must divide the interval length evenly.
+#' If `N` is provided, the width is calculated as `(interval[2] - interval[1]) / N}`.
 #'
 #' @example examples/partitions_example.R
 #' @export
@@ -139,8 +139,9 @@ create_partition_equal_lengths <- function(interval, width, N) {
 #' @return A partition object with intervals defined by consecutive cutoffs.
 #'
 #' @details
-#' The function creates intervals of the form \code{[cutoffs[i], cutoffs[i+1])} for
-#' i = 1, ..., length(cutoffs)-1. The cutoffs must be sorted in ascending order.
+#' The function creates intervals of the form `[cutoffs[i], cutoffs[i+1])` for
+#' `i = 1, ..., length(cutoffs)-1`.
+#' The cutoffs must be sorted in ascending order.
 #' Infinite values are allowed for the first and last cutoffs.
 #'
 #' @examples
@@ -178,7 +179,7 @@ create_partition_from_cutoffs <- function(cutoffs) {
 #' Default is right-continuous intervals, but right-continuous intervals can be specified.
 #'
 #' @param x Number to check. Must be a single numeric value.
-#' @param partition Partition object created by \code{create_partition}.
+#' @param partition Partition object created by [create_partition].
 #'
 #' @return A list with two elements:
 #'   \item{index}{The index of the interval in the partition that contains x, or NA if not found}
@@ -186,7 +187,7 @@ create_partition_from_cutoffs <- function(cutoffs) {
 #'
 #' @details
 #' The function checks if x falls within any interval in the partition.
-#' For an interval [a, b), x is considered to be in the interval if a <= x < b.
+#' For an interval \eqn{[a, b)}, x is considered to be in the interval if \eqn{a <= x < b}.
 #'
 #' @examples
 #' p <- create_partition(list(c(-Inf, 1), c(1, 2), c(2, Inf)))
