@@ -24,7 +24,7 @@ package installed and that the \code{kpsewhich} command is accessible in your PA
 try(setup_font()) # Wrap in try in case fonts/kpsewhich aren't found
 
 # Check if font was added
-if ("Libertinus Serif" \%in\% sysfonts::font_families()) {
+if ("Libertinus" \%in\% sysfonts::font_families()) {
   FONT <- "Libertinus"
   IFONT <- "Libertinus_Italic"
 
@@ -37,7 +37,7 @@ if ("Libertinus Serif" \%in\% sysfonts::font_families()) {
 
   print(p)
 } else {
-  message("Libertinus Serif font could not be set up.")
+  message("Libertinus font could not be set up.")
 }
 }
 }
