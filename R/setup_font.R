@@ -57,7 +57,7 @@ find_tex_font <- function(filename) {
 #' try(setup_font()) # Wrap in try in case fonts/kpsewhich aren't found
 #'
 #' # Check if font was added
-#' if ("Libertinus Serif" %in% sysfonts::font_families()) {
+#' if ("Libertinus" %in% sysfonts::font_families()) {
 #'   FONT <- "Libertinus"
 #'   IFONT <- "Libertinus_Italic"
 #'
@@ -70,11 +70,21 @@ find_tex_font <- function(filename) {
 #'
 #'   print(p)
 #' } else {
-#'   message("Libertinus Serif font could not be set up.")
+#'   message("Libertinus font could not be set up.")
 #' }
 #' }
 #' @export
 setup_font <- function() { # Renamed for clarity, or keep setup_font
+
+  # Fast path: if we've already registered these families in this R session,
+  # there's no need to run the (potentially slow) kpsewhich lookups again.
+  required_families <- c("Libertinus", "Libertinus_Italic")
+  already_registered <- all(required_families %in% sysfonts::font_families())
+  if (already_registered) {
+    showtext::showtext_auto()
+    message("Libertinus fonts already registered in this session; skipping kpsewhich lookup.")
+    return(invisible(NULL))
+  }
 
   message("Attempting to locate Libertinus Serif fonts using kpsewhich...")
 
