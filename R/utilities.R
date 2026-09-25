@@ -3,7 +3,8 @@
 #' Measures user, system, and elapsed time for an expression, prints a
 #' compact human-readable summary, and invisibly returns the raw timings.
 #' When `show_system = FALSE`, the printed summary omits the system row.
-#' The returned values always include system time.
+#' NOTE: The speedup calculation only works for future::multicore. 
+#'       It won't work properly for future::multisession and future.mirai::mirai_multisession
 #'
 #' @param expr Expression to evaluate. Wrap in braces `{}` for multiple statements.
 #' @param s_digits Integer. Decimal places when formatting seconds. Default is 2.
